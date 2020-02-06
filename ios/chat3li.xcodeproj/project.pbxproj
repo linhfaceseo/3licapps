@@ -16,6 +16,8 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* chat3liTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* chat3liTests.m */; };
 		50FBDBF2417C62924C556CE5 /* libPods-chat3li.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C99B2CF387C90893FFD19EC /* libPods-chat3li.a */; };
+		8422892C23EC73FA001194F0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8422892923EC73FA001194F0 /* GoogleService-Info.plist */; };
+		84C19F2623EC65FD0059F864 /* libRNPhotoView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C19F2523EC65EE0059F864 /* libRNPhotoView.a */; };
 		84E6341F23EAA08700B8105B /* libRCTSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E6341E23EAA07E00B8105B /* libRCTSplashScreen.a */; };
 		84E6342A23EAA9A500B8105B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E6342923EAA9A500B8105B /* LaunchScreen.xib */; };
 		84E6342C23EAA9C900B8105B /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E6342B23EAA9C900B8105B /* splash.png */; };
@@ -38,6 +40,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "chat3li-tvOS";
+		};
+		84C19F2423EC65EE0059F864 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 84C19F1F23EC65ED0059F864 /* RNPhotoView.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNPhotoView;
 		};
 		84E6341D23EAA07E00B8105B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -66,6 +75,8 @@
 		444E0AC3FE61B80A068EF599 /* libPods-chat3liTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-chat3liTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E9947245DBAF4EE5132B8F9 /* Pods-chat3liTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-chat3liTests.release.xcconfig"; path = "Target Support Files/Pods-chat3liTests/Pods-chat3liTests.release.xcconfig"; sourceTree = "<group>"; };
 		7C99B2CF387C90893FFD19EC /* libPods-chat3li.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-chat3li.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8422892923EC73FA001194F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		84C19F1F23EC65ED0059F864 /* RNPhotoView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNPhotoView.xcodeproj; path = "../node_modules/react-native-photo-view/ios/RNPhotoView.xcodeproj"; sourceTree = "<group>"; };
 		84E6341923EAA07D00B8105B /* RCTSplashScreen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSplashScreen.xcodeproj; path = "../node_modules/react-native-smart-splash-screen/ios/RCTSplashScreen/RCTSplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		84E6342923EAA9A500B8105B /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = "../node_modules/react-native-smart-splash-screen/ios/SplashScreenResource/LaunchScreen.xib"; sourceTree = "<group>"; };
 		84E6342B23EAA9C900B8105B /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = splash.png; path = chat3li/splash.png; sourceTree = "<group>"; };
@@ -93,6 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84C19F2623EC65FD0059F864 /* libRNPhotoView.a in Frameworks */,
 				84E6341F23EAA08700B8105B /* libRCTSplashScreen.a in Frameworks */,
 				50FBDBF2417C62924C556CE5 /* libPods-chat3li.a in Frameworks */,
 			);
@@ -165,6 +177,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				84C19F1F23EC65ED0059F864 /* RNPhotoView.xcodeproj */,
 				84E6341923EAA07D00B8105B /* RCTSplashScreen.xcodeproj */,
 			);
 			name = Libraries;
@@ -173,6 +186,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				8422892923EC73FA001194F0 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* chat3li */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* chat3liTests */,
@@ -192,6 +206,14 @@
 				00E356EE1AD99517003FC87E /* chat3liTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* chat3li-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* chat3li-tvOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		84C19F2023EC65ED0059F864 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				84C19F2523EC65EE0059F864 /* libRNPhotoView.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -251,6 +273,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				E8E2D12E859011B0BC3EE990 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -341,6 +364,10 @@
 					ProductGroup = 84E6341A23EAA07D00B8105B /* Products */;
 					ProjectRef = 84E6341923EAA07D00B8105B /* RCTSplashScreen.xcodeproj */;
 				},
+				{
+					ProductGroup = 84C19F2023EC65ED0059F864 /* Products */;
+					ProjectRef = 84C19F1F23EC65ED0059F864 /* RNPhotoView.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -353,6 +380,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		84C19F2523EC65EE0059F864 /* libRNPhotoView.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNPhotoView.a;
+			remoteRef = 84C19F2423EC65EE0059F864 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		84E6341E23EAA07E00B8105B /* libRCTSplashScreen.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -375,6 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84E6342A23EAA9A500B8105B /* LaunchScreen.xib in Resources */,
+				8422892C23EC73FA001194F0 /* GoogleService-Info.plist in Resources */,
 				84E6342C23EAA9C900B8105B /* splash.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
@@ -512,6 +547,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E8E2D12E859011B0BC3EE990 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-chat3li/Pods-chat3li-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-C++/gRPCCertificates-Cpp.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gRPCCertificates-Cpp.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-chat3li/Pods-chat3li-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {

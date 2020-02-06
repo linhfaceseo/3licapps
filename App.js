@@ -7,48 +7,83 @@
  */
 
 import React, { Component } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
+import { Easing, StatusBar, View } from 'react-native';
+import { EventRegister } from "react-native-event-listeners";
 import SplashScreen from 'react-native-smart-splash-screen';
-
+import { createAppContainer, createStackNavigator } from "react-navigation";
+import ChatDetailPage from './src/pages/ChatDetailPage';
+import GroupMessagePage from './src/pages/GroupMessagePage';
+import LoginPage from './src/pages/LoginPage';
+import FCMController from './src/pns/FCMController';
+import APICommonService from './src/apis/APICommonService';
+import ColorApp from './src/utils/ColorApp';
+import Constants from './src/utils/Constants';
+import * as Util from './src/utils/Util';
 
 class App extends Component {
+
   constructor(props) {
     super(props);
 
     this.state = {
-      // currentStackName: Constants.STACK_SCREEN_KEY.TUTORIAL_STACK_KEY
+      currentStackName: Constants.STACK_SCREEN_KEY.LOGIN_STACK_KEY
     }
   }
 
   componentDidMount() {
     /* Listener event to change stack */
-    // this.changeStackListener = EventRegister.addEventListener(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, (stackName) => {
-    //   this.setViewState({
-    //     currentStackName: stackName
-    //   });
-    // });
+    this.changeStackListener = EventRegister.addEventListener(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, (stackName) => {
+      this.setViewState({
+        currentStackName: stackName
+      });
+    });
+
+    // Get first-time using app
+    //this.checkFirstTimeUsingApp();
+    this.onCloseSplashScreen();
 
     // Get saved user info
-    // this.getSavedUserInfoLogin();
+    this.getSavedUserInfoLogin();
 
+  }
 
-    this.onCloseSplashScreen();
+  componentWillUnmount() {
+    this.hadUnmount = true;
+
+    // Remove listener
+    EventRegister.removeAllListeners();
+  }
+
+  checkFirstTimeUsingApp = async () => {
+    let alreadyUsingApp = await Util.getItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.ALREADY_USING_APP);
+
+    if (alreadyUsingApp === '1') {
+      this.setViewState({
+        currentStackName: Constants.STACK_SCREEN_KEY.DASHBOARD_STACK_KEY
+      }, () => {
+        this.onCloseSplashScreen();
+      });
+    } else {
+      await Util.setItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.ALREADY_USING_APP, '1');
+      this.onCloseSplashScreen();
+    }
+  }
+
+  getSavedUserInfoLogin = async () => {
+    let userInfo = await Util.getSavedLoginUserInfo();
+    if (userInfo) {
+      Constants.userInfoFullData = userInfo;
+      Constants.userInfo = userInfo.user;
+
+      // Update Bearer Token header
+      APICommonService.updateTokenBearer(userInfo.accessToken.token);
+    }
+  }
+
+  setViewState = (...params) => {
+    if (!!this.hadUnmount) return;
+
+    this.setState(...params);
   }
 
   onCloseSplashScreen = () => {
@@ -61,100 +96,86 @@ class App extends Component {
     }, 1000);
   }
 
+  handleRouteChange = (prevState, currentState, action) => {
+  };
+
   render() {
-    return(
-      <View style={{flex: 1, alignItems:'center', justifyContent:'center'}}>
-        <Text>Hello 3liChat</Text>
+
+    const Stack = getStackByName(this.state.currentStackName);
+
+    return (
+      <View style={{ flex: 1 }}>
+        <StatusBar
+          backgroundColor={ColorApp.yellowApp}
+          barStyle="dark-content"
+        />
+        <Stack
+          onNavigationStateChange={this.handleRouteChange}
+          initialStack={true}
+        />
+
+        <FCMController />
       </View>
-    )
+    );
   }
 }
 
-// const App: () => React$Node = () => {
-//   return (
-//     <>
-//       <StatusBar barStyle="dark-content" />
-//       <SafeAreaView>
-//         <ScrollView
-//           contentInsetAdjustmentBehavior="automatic"
-//           style={styles.scrollView}>
-//           <Header />
-//           {global.HermesInternal == null ? null : (
-//             <View style={styles.engine}>
-//               <Text style={styles.footer}>Engine: Hermes</Text>
-//             </View>
-//           )}
-//           <View style={styles.body}>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Step One</Text>
-//               <Text style={styles.sectionDescription}>
-//                 Edit <Text style={styles.highlight}>App.js</Text> to change this
-//                 screen and then come back to see your edits.
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>See Your Changes</Text>
-//               <Text style={styles.sectionDescription}>
-//                 <ReloadInstructions />
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Debug</Text>
-//               <Text style={styles.sectionDescription}>
-//                 <DebugInstructions />
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Learn More</Text>
-//               <Text style={styles.sectionDescription}>
-//                 Read the docs to discover what to do next:
-//               </Text>
-//             </View>
-//             <LearnMoreLinks />
-//           </View>
-//         </ScrollView>
-//       </SafeAreaView>
-//     </>
-//   );
-// };
+const getStackByName = stack => {
+  switch (stack) {
+    case Constants.STACK_SCREEN_KEY.DASHBOARD_STACK_KEY:
+      return HomeStack;
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+    case Constants.STACK_SCREEN_KEY.LOGIN_STACK_KEY:
+      return LoginStack;
+
+    default:
+      return LoginStack;
+  }
+};
 
 export default App;
+
+
+const LoginStack = createAppContainer(createStackNavigator(
+  {
+    LoginPage: { name: Constants.PAGE_KEY.LOGIN_PAGE_KEY, screen: LoginPage }
+  },
+  {
+    headerMode: 'none',
+    transitionConfig
+  }
+));
+
+const HomeStack = createAppContainer(createStackNavigator({
+  GroupMessagePage: { name: Constants.PAGE_KEY.GROUP_MESSAGE_PAGE_KEY, screen: GroupMessagePage },
+  ChatDetailPage: { name: Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, screen: ChatDetailPage },
+},
+  {
+    headerMode: 'none',
+    transitionConfig
+  })
+);
+
+const transitionConfig = () => {
+  return {
+    transitionSpec: {
+      duration: 500,
+      easing: Easing.out(Easing.poly(4)),
+      timing: Animated.timing,
+      useNativeDriver: true,
+    },
+    screenInterpolator: sceneProps => {
+      const { layout, position, scene } = sceneProps
+
+      const thisSceneIndex = scene.index
+      const width = layout.initWidth
+
+      const translateX = position.interpolate({
+        inputRange: [thisSceneIndex - 1, thisSceneIndex],
+        outputRange: [width, 0],
+      })
+
+      return { transform: [{ translateX }] }
+    },
+  }
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>80098054182-2fi634vcc3pphh769sqbbnu0t87gh51l.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.80098054182-2fi634vcc3pphh769sqbbnu0t87gh51l</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAi2ma1ScAYqWyAeWcob1tHYFW63fGOV34</string>
+	<key>GCM_SENDER_ID</key>
+	<string>80098054182</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.chat3li.app</string>
+	<key>PROJECT_ID</key>
+	<string>lichatproject</string>
+	<key>STORAGE_BUCKET</key>
+	<string>lichatproject.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:80098054182:ios:804439e5ecfd378f6996e7</string>
+	<key>DATABASE_URL</key>
+	<string>https://lichatproject.firebaseio.com</string>
+</dict>
+</plist>

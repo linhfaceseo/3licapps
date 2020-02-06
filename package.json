@@ -10,9 +10,28 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "github:react-native-community/async-storage",
+    "date-fns": "^2.9.0",
+    "i18n-js": "^3.5.1",
+    "moment": "^2.24.0",
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-smart-splash-screen": "^2.3.5"
+    "react-native-appstate-listener": "^1.0.0",
+    "react-native-device-info": "^5.5.1",
+    "react-native-event-listeners": "^1.0.7",
+    "react-native-firebase": "^5.5.6",
+    "react-native-gesture-handler": "^1.5.6",
+    "react-native-image-picker": "^2.2.1",
+    "react-native-image-placeholder": "^1.0.14",
+    "react-native-img-cache": "^1.6.0",
+    "react-native-indicators": "^0.17.0",
+    "react-native-languages": "^3.0.2",
+    "react-native-photo-view": "^1.5.2",
+    "react-native-rest-client": "^0.1.1",
+    "react-native-smart-splash-screen": "^2.3.5",
+    "react-native-snap-carousel": "^3.8.4",
+    "react-navigation": "^3.11.1",
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
