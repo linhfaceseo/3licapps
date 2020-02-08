@@ -1,6 +1,7 @@
 /**
  * @format
  */
+import "./ReactotronConfig";
 console.disableYellowBox =  true;
 import React, { Component } from 'react';
 import { AppRegistry, Text } from 'react-native';

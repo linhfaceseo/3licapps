@@ -14,6 +14,8 @@ import i18n from '../translations/i18n';
 import ColorApp from '../utils/ColorApp';
 import Constants from '../utils/Constants';
 import * as Util from './../utils/Util';
+import { checkAndAskPNSPermissionFirstTime } from '../permissionApp/FCMPermission';
+import { EventRegister } from 'react-native-event-listeners';
 
 
 class LoginPage extends Component {
@@ -21,14 +23,19 @@ class LoginPage extends Component {
   constructor(props) {
     super(props);
 
+    this.email='knightking30798@gmail.com';
+    this.password='123456';
+
+
     this.state = {
-      onLoading: false,
-      messageErrorPhone: '',
+      onLoading: false
     };
 
   }
 
   componentDidMount() {
+    // Ask FCM permission
+    checkAndAskPNSPermissionFirstTime();
   }
 
   setViewState = (...params) => {
@@ -40,48 +47,56 @@ class LoginPage extends Component {
     this.hadUnmount = true;
   }
 
-  onBackPress = () => {
-    this.props.navigation.goBack();
-  }
-
   onLoginPress = () => {
-    // if (this.mobilePhone && this.mobilePhone.length >= 6) {
-    //   this.setViewState({
-    //     messageErrorPhone: "",
-    //     onLoading: true
-    //   });
-    //   this.callSignInPhoneNumber();
-    // } else {
-    //   this.setViewState({ messageErrorPhone: i18n.t(Constants.TRANSLATE_KEY.please_enter_at_least_6_characters) })
-    // }
+    if (this.isValidData()) {
+      this.callSignWithEmail();
+    }
   }
 
-  callSignInPhoneNumber = () => {
-    APICommonService.registerPhone("", "").then(resp => {
-      
-      if (resp.success) {
-      } else {
-        Util.showNoticeAlert('', resp.message, false);
-      }
+  isValidData = () => {
+    if (!this.email || this.email.trim === '') {
+      Util.showNoticeAlert('', i18n.t(Constants.TRANSLATE_KEY.please_input_email_msg));
+      return false;
+    }
+    if (!this.password || this.password.trim === '') {
+      Util.showNoticeAlert('', i18n.t(Constants.TRANSLATE_KEY.please_input_password_msg));
+      return false;
+    }
+
+    if (!Util.emailValidator(this.email)) {
+      Util.showNoticeAlert('', i18n.t(Constants.TRANSLATE_KEY.invalid_email_address_msg));
+      return false;
+    }
+
+    return true;
+  }
+
+  callSignWithEmail = () => {
+    APICommonService.login(this.email, this.password).then(resp => {
+      Util.showNoticeAlert('RESP', JSON.stringify(resp), false);
+      console.tlog('login resp', resp);
+      // if (resp && resp.success) {
+      // } else {
+      //   Util.showNoticeAlert('', JSON.stringify(resp), false);
+      // }
     }).catch(err => {
-      Util.showNoticeAlert('', JSON.stringify(err), false);
+      console.tlog('login Err', err);
+      Util.showNoticeAlert('ERROR', JSON.stringify(err), false);
     }).finally(() => {
       this.setViewState({
         onLoading: false
-      })
+      });
+
+      // EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.DASHBOARD_STACK_KEY);
     });
   }
 
   render() {
-    let emptyPhone = true;
-    if (this.mobilePhone && this.mobilePhone !== '') {
-      emptyPhone = false;
-    }
     return (
       <View style={styles.container}>
 
         <HeaderNormal
-          onBackPress={this.onBackPress}
+          hideLeft={true}
           title={''}
           showRight={false}
           hideBoxShadow={true} />
@@ -99,28 +114,43 @@ class LoginPage extends Component {
                 {i18n.t(Constants.TRANSLATE_KEY.login_with_phone_no_title)}
               </Text>
 
-              <TextInput
-                underlineColorAndroid={"transparent"}
-                onChangeText={text => {
-                  this.receiverName = text;
-                }}
-                autoCorrect={false}
-                autoFocus={false}
-                placeholder={i18n.t(Constants.TRANSLATE_KEY.enter_name_hint)}
-                placeholderTextColor={ColorApp.gray165}
-                style={[styles.styleInput]}
-              />
-              {this.state.messageErrorPhone !== '' && <Text style={styles.textError}>
-                {this.state.messageErrorPhone}
-              </Text>}
+              <View style={{ width: '100%' }}>
+                <TextInput
+                  underlineColorAndroid={"transparent"}
+                  onChangeText={text => {
+                    this.email = text;
+                  }}
+                  keyboardType={'email-address'}
+                  autoCorrect={false}
+                  autoFocus={false}
+                  placeholder={i18n.t(Constants.TRANSLATE_KEY.enter_your_email_title)}
+                  placeholderTextColor={ColorApp.blackApp}
+                  style={[styles.styleInput, { marginLeft: 35, marginRight: 35 }]}
+
+                  value={'knightking30798@gmail.com'}
+                />
+
+                <TextInput
+                  underlineColorAndroid={"transparent"}
+                  onChangeText={text => {
+                    this.password = text;
+                  }}
+                  secureTextEntry={true}
+                  autoCorrect={false}
+                  autoFocus={false}
+                  placeholder={i18n.t(Constants.TRANSLATE_KEY.enter_your_password)}
+                  placeholderTextColor={ColorApp.blackApp}
+                  style={[styles.styleInput, { marginLeft: 35, marginRight: 35, marginTop: 15 }]}
+
+                  value={'123456'}
+                />
+              </View>
 
               <View style={[styles.viewInput, { marginTop: 45 }]}>
                 <TouchableOpacity
-                  activeOpacity={emptyPhone ? 1 : Constants.OPACITY_BUTTON}
+                  activeOpacity={Constants.OPACITY_BUTTON}
                   onPress={() => {
-                    if (!emptyPhone) {
-                      this.onLoginPress();
-                    }
+                    this.onLoginPress();
                   }}
                   style={styles.btnSignIn}>
                   <Text style={styles.textButton}>{i18n.t(Constants.TRANSLATE_KEY.signin_title).toUpperCase()}</Text>
@@ -142,8 +172,23 @@ class LoginPage extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: ColorApp.yellowApp
   },
+
+  styleInput: {
+    borderColor: ColorApp.gray165, borderWidth: 0.5, borderRadius: 4, padding: 5,
+    // fontFamily: Constants.FONT_NAME.LATO_REGULAR,
+    textAlignVertical: 'top',
+    fontSize: 12,
+    height: 42,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 12,
+    paddingRight: 12,
+    color: ColorApp.blackApp,
+  },
+
   imgLogo: {
     width: 137,
     height: 91,

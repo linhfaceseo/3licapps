@@ -3,7 +3,6 @@ package com.chat3li.app;
 import android.app.Application;
 import android.content.Context;
 
-import com.chat3li.BuildConfig;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;

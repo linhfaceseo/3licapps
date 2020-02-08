@@ -128,11 +128,13 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.chat3li"
+        applicationId "com.chat3li.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -182,6 +184,18 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
+    // For FireBase
+    implementation project(':react-native-firebase')
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation('com.google.android.gms:play-services-base:+') {
+        force = true;
+    }
+    implementation ('com.google.firebase:firebase-messaging:+') {
+        force = true;
+    }
+    implementation 'com.google.firebase:firebase-firestore:21.2.1'
+    // END FIREBASE
+
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
@@ -197,5 +211,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
-
+apply plugin: 'com.google.gms.google-services'
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

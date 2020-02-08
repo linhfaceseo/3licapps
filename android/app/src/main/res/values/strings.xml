@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">3lichat</string>
+    <string name="app_name">3liChat</string>
+    <string name="default_notification_channel_id">3liChat_App</string>
 </resources>

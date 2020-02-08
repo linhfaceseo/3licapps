@@ -66,12 +66,6 @@ export default class GroupMessagePage extends Component {
     }
 
 
-    onBackPress = () => {
-        this.props.navigation.goBack();
-    }
-
-    onSearchPress = () => { }
-
     getGroupChats = (showLoading = true) => {
         if (showLoading) {
             this.setViewState({
@@ -227,15 +221,11 @@ export default class GroupMessagePage extends Component {
         return (
             <View style={styles.container}>
                 <HeaderNormal
-                    onBackPress={this.onBackPress}
-                    hideLeft={this.props.hideLeft}
-                    onIconRightOnePress={this.onSearchPress}
+                    hideLeft={true}
                     title={i18n.t(Constants.TRANSLATE_KEY.message_title)}
                     customStyleHeader={{ backgroundColor: ColorApp.yellowApp }}
                     showRight={false}
-                    showNotification={true}
                     navigation={this.props.navigation}
-                    hideBoxShadow={true}
                 />
 
                 <View style={[{ flex: 1 }]}>

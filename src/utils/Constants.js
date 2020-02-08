@@ -119,7 +119,13 @@ export default module = {
     order_again: 'order_again',
     confirm_received: 'confirm_received',
     sent_an_image_msg_alias:'sent_an_image_msg_alias',
-    message_title: 'message_title'
+    message_title: 'message_title',
+    enter_your_email_title:'enter_your_email_title',
+    enter_your_password: 'enter_your_password',
+    signin_title:'signin_title',
+    invalid_email_address_msg:'invalid_email_address_msg',
+    please_input_password_msg:'please_input_password_msg',
+    please_input_email_msg: 'please_input_email_msg'
 
   },
 

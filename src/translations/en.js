@@ -370,4 +370,7 @@ export default {
     [Constants.TRANSLATE_KEY.record_audio_instruction_msg]: "Long-Press to record & press again to send a voice",
     /* ------- NEW KEYS ------ */
 
+    [Constants.TRANSLATE_KEY.enter_your_password]: "Enter your password",
+    [Constants.TRANSLATE_KEY.please_input_password_msg]: "Please input your password",
+    [Constants.TRANSLATE_KEY.please_input_email_msg]: "Please input your email address",
 }

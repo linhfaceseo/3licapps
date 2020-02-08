@@ -3,7 +3,7 @@ import RestClient from 'react-native-rest-client';
 import Constants from '../utils/Constants';
 
 const API_URL = {
-    SERVER_HOST: 'https://dev.dashboard.tingkh.com/v1', // DEV
+    SERVER_HOST: 'https://3lichat.us/Server/Service/RequestAction.php', // DEV
     //SERVER_HOST: 'https://api.tingkh.com/v1', // LIVE
     GET_ALL_CATEGORIES: '/api/product-categories',
     GET_ALL_PARENT_CATEGORIES: '/api/product-parent-categories',
@@ -53,7 +53,9 @@ const API_URL = {
     GET_UNREAD_NUMBER_NOTIFICATION: '/api/notifications/count-unread',
     ADD_REVIEW_PRODUCT: '/api/products/<ID>/review',
     GET_ALL_REVIEWS_PRODUCT: '/api/products/<ID>/reviews',
-    LOGOUT: '/api/profile/logout'
+    LOGOUT: '/api/profile/logout',
+
+    LOGIN: 'Login'
 }
 
 export const API_KEY = {
@@ -101,7 +103,16 @@ export const API_KEY = {
     DESCRIPTION_KEY: 'description',
     S_KEY: 's',
     SORT_KEY: 'sort',
-    SECCOND_RECORD_AUDIO: 'second_record'
+    SECCOND_RECORD_AUDIO: 'second_record',
+
+
+    LOGIN_EMAIL_KEY: 'loginEmail',
+    LOGIN_PASSWORD_KEY: 'loginPassword',
+    TOKEN_DEVICE_KEY: 'tokenDevice',
+    ACTION_REQUEST_KEY: 'actionRequest',
+    MANAGER_ID_KEY: 'managerID',
+    SITE_ID_KEY: 'siteID',
+
 }
 
 class APICommonService extends RestClient {
@@ -110,13 +121,56 @@ class APICommonService extends RestClient {
         // Initialize with your base URL
         super(API_URL.SERVER_HOST, {
             headers: {
-                // Include as many custom headers as you need
-                "Content-Type": "application/json",
-                "x-ting-device-type": Constants.isIOS ? 'ios' : 'android',
-                "x-ting-device-id": Constants.uniqueDeviceID,
-                "x-ting-fcm-token": Constants.fcmToken
+                "Content-Type": "application/x-www-form-urlencoded",
+                'Cache-Control': 'no-cache',
+                // 'Postman-Token': 'd37b7bbd-5bc1-4882-b262-e74a8e0b5639'
             },
         });
+    }
+
+    login = async (email, password) => {
+        var params = {};
+        params[API_KEY.LOGIN_EMAIL_KEY] = email;
+        params[API_KEY.LOGIN_PASSWORD_KEY] = password;
+        params[API_KEY.TOKEN_DEVICE_KEY] = Constants.fcmToken;
+        params[API_KEY.ACTION_REQUEST_KEY] = API_URL.LOGIN;
+        // console.tlog('login params', params);
+
+        var formBody = [];
+        for (var property in params) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(params[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
+        console.tlog(formBody);
+        formBody = formBody.join("&");
+
+
+        // params[API_KEY.MANAGER_ID_KEY] = 2;
+        // params[API_KEY.SITE_ID_KEY] = 2;
+        // params[API_KEY.ACTION_REQUEST_KEY] = 'getConversation';
+
+        //console.tlog('login params ENDCODE', formBody);
+
+        var resp = await this.POST('',params);
+        console.tlog('=====',resp);
+        return resp;
+
+        // var resp = await fetch(API_URL.SERVER_HOST, {
+        //     method: 'POST',
+        //     headers: {
+        //          'Accept': 'application/json',
+        //         'Content-Type': 'application/x-www-form-urlencoded'
+        //     },
+        //     body: formBody
+        // })
+        // console.tlog('=====',resp);
+        // return resp;
+        // .then(resp => {
+        //     console.tlog('login params RESP', resp);
+        // }).catch(err=>{
+        //     console.tlog('login params ERR', err);
+        // })
     }
 
     updateHeader(params) {
@@ -141,6 +195,8 @@ class APICommonService extends RestClient {
             this.updateHeader(paramsHeader);
         }
     }
+
+
 
     updateInterest = async (interests) => {
         var params = {};
