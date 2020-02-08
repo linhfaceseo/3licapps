@@ -74,6 +74,7 @@ export default class GroupMessagePage extends Component {
         }
 
         APICommonService.getGroupChats().then(resp => {
+            console.tlog('resp', resp);
             if (resp.success && resp.data) {
                 this.setViewState({
                     groupChats: resp.data
@@ -165,14 +166,11 @@ export default class GroupMessagePage extends Component {
             avatar = item.vendor.image;
             name = item.vendor.name;
         }
-        if (item.last_message) {
-            lastMsg = item.last_message.message;
-            //sendTime = TimeHelper.convertTimeStampToStringDate(item.last_message.send_at, Constants.DATE_TIME_FORMAT.DDMMYYYY)
-            let chatDate = moment(item.last_message.send_at).toDate();
-            sendTime = getParsedDate(chatDate);
-            if (item.last_message.type === Constants.CHAT_TYPE.IMAGE) {
-                lastMsg = i18n.t(Constants.TRANSLATE_KEY.sent_an_image_msg_alias);
-            }
+        lastMsg = item.msg;
+        let chatDate = moment(item.msg_time).toDate();
+        sendTime = getParsedDate(chatDate);
+        if (item.type === Constants.CHAT_TYPE.IMAGE) {
+            lastMsg = i18n.t(Constants.TRANSLATE_KEY.sent_an_image_msg_alias);
         }
 
         return (
@@ -186,7 +184,7 @@ export default class GroupMessagePage extends Component {
 
                     <Image
                         style={styles.avatar}
-                        source={{ uri: avatar }} />
+                        source={avatar? { uri: avatar }:require('../images/ic_avatar.png')} />
                     <View style={styles.status} />
                     <View style={{
                         flex: 1,
@@ -211,10 +209,9 @@ export default class GroupMessagePage extends Component {
     }
 
     onItemGroupMessageSelect = (group) => {
-        this.props.navigation.push(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, {
-            vendorInfo: group.vendor,
-            chatInfo: group
-        });
+        // this.props.navigation.push(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, {
+        //     chatInfo: group
+        // });
     }
 
     render() {

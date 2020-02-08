@@ -67,6 +67,7 @@ export default module = {
 
   APP_EVENT_KEY: {
     CHANGE_STACK_NOTIFY_KEY: 'ChangeStackNotify',
+    SUCCESS_GET_FCM_TOKEN: 'SUCCESS_GET_FCM_TOKEN',
     RESET_TEXT_INPUT_CHAT: 'ResetTextInputChat',
     PROCESS_PUSH_FROM_FB: 'ProcessPushFromFirebase',
     NEW_NOTIFICATION: 'HaveNewNotification',

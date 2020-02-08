@@ -5,6 +5,7 @@ import APICommonService, { API_KEY } from "../apis/APICommonService";
 import Constants from "../utils/Constants";
 import * as Util from '../utils/Util';
 import i18n from "../translations/i18n";
+import { EventRegister } from "react-native-event-listeners";
 
 
 export const checkAndAskPNSPermissionFirstTime = async () => {
@@ -73,5 +74,7 @@ export const registerPNSDevice = (FCM) => {
             //     console.tlog('updateFCMToken ERR', err);
             // });
         }
+
+        EventRegister.emitEvent(Constants.APP_EVENT_KEY.SUCCESS_GET_FCM_TOKEN);
     });
 }

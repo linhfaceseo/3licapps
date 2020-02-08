@@ -23,19 +23,21 @@ class LoginPage extends Component {
   constructor(props) {
     super(props);
 
-    this.email='knightking30798@gmail.com';
-    this.password='123456';
+    this.email = 'knightking30798@gmail.com';
+    this.password = '123456';
 
 
     this.state = {
-      onLoading: false
+      onLoading: true
     };
 
   }
 
   componentDidMount() {
-    // Ask FCM permission
-    checkAndAskPNSPermissionFirstTime();
+    
+    EventRegister.addEventListener(Constants.APP_EVENT_KEY.SUCCESS_GET_FCM_TOKEN, () => {
+      this.callSignWithEmail(true);
+    })    
   }
 
   setViewState = (...params) => {
@@ -45,6 +47,22 @@ class LoginPage extends Component {
 
   componentWillUnmount() {
     this.hadUnmount = true;
+  }
+
+  getSavedUserInfoLogin = async () => {
+    let userInfo = await Util.getSavedLoginUserInfo();
+    if (userInfo) {
+      Constants.userInfo = userInfo;
+
+      this.email = userInfo.managerEmail;
+      this.password = userInfo.password;
+
+      this.onLoginPress();
+    } else {
+      this.setViewState({
+        onLoading: false
+      });
+    }
   }
 
   onLoginPress = () => {
@@ -71,23 +89,37 @@ class LoginPage extends Component {
     return true;
   }
 
-  callSignWithEmail = () => {
+  callSignWithEmail = (autoLogin = false) => {
+    this.setViewState({
+      onLoading: true
+    });
+
     APICommonService.login(this.email, this.password).then(resp => {
-      Util.showNoticeAlert('RESP', JSON.stringify(resp), false);
-      console.tlog('login resp', resp);
-      // if (resp && resp.success) {
-      // } else {
-      //   Util.showNoticeAlert('', JSON.stringify(resp), false);
-      // }
+      console.tlog('resp', resp);
+      if (resp && resp.success) {
+        // Set pass
+        resp.data.password = this.password;
+
+        // Keep user info
+        Constants.userInfo = resp.data;
+
+        // Save local storage
+        Util.setItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.USER_INFO, JSON.stringify(resp.data));
+
+        EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.DASHBOARD_STACK_KEY);
+      } else {
+        if(!autoLogin) {
+          Util.showNoticeAlert('', JSON.stringify(resp), false);
+        }
+      }
     }).catch(err => {
-      console.tlog('login Err', err);
-      Util.showNoticeAlert('ERROR', JSON.stringify(err), false);
+      if(!autoLogin) {
+        Util.showNoticeAlert('ERROR', JSON.stringify(err), false);
+      }
     }).finally(() => {
       this.setViewState({
         onLoading: false
       });
-
-      // EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.DASHBOARD_STACK_KEY);
     });
   }
 

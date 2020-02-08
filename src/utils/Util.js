@@ -162,8 +162,8 @@ export const invalidOrEmptyString = (str) => {
 }
 
 export const getSavedLoginUserInfo = async () => {
-    if (Constants.userInfoFullData) {
-        return Constants.userInfoFullData;
+    if (Constants.userInfo) {
+        return Constants.userInfo;
     } else {
         let userInfoJson = await getItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.USER_INFO);
 
