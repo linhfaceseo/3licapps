@@ -4,6 +4,7 @@ import ImagePicker from "react-native-image-picker";
 import { BallIndicator } from 'react-native-indicators';
 import i18n from "../translations/i18n";
 import Constants from "./Constants";
+import { EventRegister } from "react-native-event-listeners";
 
 // based on iphone 5s's scale
 // Use iPhone8 1x as base size which is 375 x 667
@@ -177,4 +178,9 @@ export const getSavedLoginUserInfo = async () => {
 
 export const emailValidator = (e) => {
     return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(e);
+}
+
+export const onLogOut = () => {
+    removeKeyItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.USER_INFO);
+    EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.LOGIN_STACK_KEY);
 }

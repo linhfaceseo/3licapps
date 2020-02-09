@@ -6,40 +6,38 @@ import i18n from "../../translations/i18n";
 
 export default class HeaderChat extends Component {
 
-	constructor(props){
-		super(props);
-	}
+    constructor(props) {
+        super(props);
+    }
 
-	render() {
-		const { hideLeft, vendorInfo } = this.props;
+    render() {
+        const { hideLeft, chatInfo } = this.props;
 
-        let avatar = '';
-        let name = '';
-
-        if (vendorInfo) {
-            avatar = vendorInfo.image;
-            name = vendorInfo.name;
+        let avatar = require('../../images/ic_avatar.png');
+        let name = 'User';
+        if(chatInfo) {
+            name = chatInfo.msg_userPhoneNumber;
         }
 
-		return(
-			<View style={[styles.container, {
+        return (
+            <View style={[styles.container, {
                 paddingTop: Constants.PAD_TOP_HEADER,
             }]}>
-				<View style={styles.headerContent}>
-					<Image
+                <View style={styles.headerContent}>
+                    <Image
                         style={styles.avatar}
-                        source={{ uri: avatar }} />
-					<View style={{justifyContent:'flex-start'}}>
-						<Text
-							numberOfLines={1}
-							ellipsizeMode='tail'
-							style={styles.textHeader}>{name}
-						</Text>
-						<View style={styles.statusWrapper}>
-							<View style={styles.status}></View>
-							<Text style={styles.statusText}>{i18n.t(Constants.TRANSLATE_KEY.online)}</Text>
-						</View>
-					</View>
+                        source={avatar} />
+                    <View style={{ justifyContent: 'flex-start' }}>
+                        <Text
+                            numberOfLines={1}
+                            ellipsizeMode='tail'
+                            style={styles.textHeader}>{name}
+                        </Text>
+                        <View style={styles.statusWrapper}>
+                            <View style={styles.status}></View>
+                            <Text style={styles.statusText}>{i18n.t(Constants.TRANSLATE_KEY.online)}</Text>
+                        </View>
+                    </View>
                 </View>
 
                 {!hideLeft && <TouchableOpacity
@@ -53,42 +51,51 @@ export default class HeaderChat extends Component {
                         style={this.props.leftStyle ? this.props.leftStyle : styles.icon_header}
                         source={this.props.leftResource ? this.props.leftResource : require('../../images/ic_back.png')}
                     />
-				</TouchableOpacity>}
-				<View style={{ flex: 1 }}></View>
+                </TouchableOpacity>}
+                <View style={{ flex: 1 }}></View>
+                <TouchableOpacity
+                    activeOpacity={Constants.OPACITY_BUTTON}
+                    onPress={this.props.onIconRightOnePress}
+                    style={[styles.item_headerRight, {
+                        marginRight: this.props.showNotification ? 0 : 10
+                    }]}
+                >
+                    <Image
+                        style={this.props.rightStyle ? this.props.rightStyle : styles.icon_logout_black}
+                        source={this.props.rightResource ? this.props.rightResource : require('../../images/ic_logout.png')}
+                    />
 
-			</View>
-		)
-	}
+                </TouchableOpacity>
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
-	headerWrapper: {
-		flex:1,
-	},
-	container: {
+    container: {
         width: '100%',
         height: Constants.HEIGHT_NAVIGATION_BAR,
-		flexDirection: "row",
-		backgroundColor: ColorApp.yellowApp,
-		alignItems:'flex-start'
+        flexDirection: "row",
+        backgroundColor: ColorApp.yellowApp,
+        alignItems: 'flex-start'
     },
-	headerContent: {
-		position: 'absolute',
-		width: '100%',
+    headerContent: {
+        position: 'absolute',
+        width: '100%',
         height: '100%',
         top: Constants.PAD_TOP_HEADER,
         left: 0,
         alignItems: 'center',
         justifyContent: 'flex-start',
         paddingLeft: 50,
-		paddingRight: 50,
-		flexDirection:'row',
-	},
+        paddingRight: 50,
+        flexDirection: 'row',
+    },
     item_header: {
         width: 60,
         height: '100%',
         justifyContent: 'center',
-		alignItems: 'center',
+        alignItems: 'center',
     },
     icon_header: {
         width: 9,
@@ -99,15 +106,7 @@ const styles = StyleSheet.create({
         // fontFamily: Constants.FONT_NAME.LATO_BOLD,
         color: ColorApp.blackApp
     },
-    viewTitle: {
-        width: '100%',
-        left: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingLeft: 50,
-        paddingRight: 50
-	},
-	avatar: {
+    avatar: {
         marginRight: 15,
         width: 38,
         height: 38,
@@ -118,17 +117,28 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: 8,
         height: 8,
-		backgroundColor: ColorApp.green,
-		marginRight:5,
-		marginTop: 5,
-	},
-	statusWrapper: {
-		display:'flex',
-		flexDirection:'row',
-	},
-	statusText: {
-		fontSize: 12,
-		// fontFamily: Constants.FONT_NAME.LATO_REGULAR,
-		color: ColorApp.blackApp,
-	}
+        backgroundColor: ColorApp.green,
+        marginRight: 5,
+        marginTop: 5,
+    },
+    statusWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    statusText: {
+        fontSize: 12,
+        // fontFamily: Constants.FONT_NAME.LATO_REGULAR,
+        color: ColorApp.blackApp,
+    },
+    item_headerRight: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    icon_logout_black: {
+        width: 25,
+        height: 25,
+    },
 })

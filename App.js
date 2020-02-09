@@ -14,12 +14,10 @@ import { createAppContainer, createStackNavigator } from "react-navigation";
 import ChatDetailPage from './src/pages/ChatDetailPage';
 import GroupMessagePage from './src/pages/GroupMessagePage';
 import LoginPage from './src/pages/LoginPage';
+import { checkAndAskPNSPermissionFirstTime } from './src/permissionApp/FCMPermission';
 import FCMController from './src/pns/FCMController';
-import APICommonService from './src/apis/APICommonService';
 import ColorApp from './src/utils/ColorApp';
 import Constants from './src/utils/Constants';
-import * as Util from './src/utils/Util';
-import { checkAndAskPNSPermissionFirstTime } from './src/permissionApp/FCMPermission';
 
 class App extends Component {
 
@@ -39,9 +37,6 @@ class App extends Component {
       });
     });
 
-    // Get saved user info
-    // this.getSavedUserInfoLogin();
-
     this.onCloseSplashScreen();
 
     // Ask FCM permission
@@ -53,18 +48,6 @@ class App extends Component {
 
     // Remove listener
     EventRegister.removeAllListeners();
-  }
-
-  getSavedUserInfoLogin = async () => {
-    let userInfo = await Util.getSavedLoginUserInfo();
-    if (userInfo) {
-      Constants.userInfo = userInfo;
-
-      this.onAutoLogin(userInfo);
-    } else {
-      // Close splash
-      this.onCloseSplashScreen();
-    }
   }
 
   setViewState = (...params) => {
@@ -81,27 +64,6 @@ class App extends Component {
         delay: 0
       });
     }, 1000);
-  }
-
-  onAutoLogin = (userInfo) => {
-    APICommonService.login(userInfo.managerEmail, userInfo.password).then(resp => {
-      if (resp && resp.success) {
-        // Keep user info
-        Constants.userInfo = resp.data;
-
-        // Save local storage
-        Util.setItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.USER_INFO, JSON.stringify(resp.data));
-
-        EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.DASHBOARD_STACK_KEY);
-
-        // Close splash
-        this.onCloseSplashScreen();
-      }
-    }).catch(err => {
-    }).finally(() => {
-      // Close splash
-      this.onCloseSplashScreen();
-    });
   }
 
   handleRouteChange = (prevState, currentState, action) => {

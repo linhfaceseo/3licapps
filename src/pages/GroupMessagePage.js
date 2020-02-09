@@ -17,6 +17,7 @@ import { getParsedDate } from '../utils/TimeHelper';
 import * as Util from '../utils/Util';
 import firebase from '../pns/firebase';
 import i18n from '../translations/i18n';
+import { EventRegister } from 'react-native-event-listeners';
 
 export default class GroupMessagePage extends Component {
 
@@ -209,9 +210,13 @@ export default class GroupMessagePage extends Component {
     }
 
     onItemGroupMessageSelect = (group) => {
-        // this.props.navigation.push(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, {
-        //     chatInfo: group
-        // });
+        this.props.navigation.push(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, {
+            chatInfo: group
+        });
+    }
+
+    onIconRightOnePress = () => {
+        Util.onLogOut();
     }
 
     render() {
@@ -221,7 +226,8 @@ export default class GroupMessagePage extends Component {
                     hideLeft={true}
                     title={i18n.t(Constants.TRANSLATE_KEY.message_title)}
                     customStyleHeader={{ backgroundColor: ColorApp.yellowApp }}
-                    showRight={false}
+                    showRight={true}
+                    onIconRightOnePress={this.onIconRightOnePress}
                     navigation={this.props.navigation}
                 />
 

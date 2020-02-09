@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { FlatList, Keyboard, KeyboardAvoidingView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import APICommonService, { API_KEY } from '../apis/APICommonService';
+import APICommonService, { API_KEY, API_URL } from '../apis/APICommonService';
 import BottomChat from '../components/chatDetail/BottomChat';
 import HeaderChat from '../components/chatDetail/headerChat';
 import ItemMessage from '../components/chatDetail/ItemMessage';
@@ -29,11 +29,9 @@ export default class ChatDetailPage extends Component {
         super(props);
         let params = this.props.navigation.state.params;
         this.chatInfo = null;
-        this.vendorInfo = null;
 
         if (params) {
             this.chatInfo = params.chatInfo;
-            this.vendorInfo = params.vendorInfo;
         }
 
         this.state = {
@@ -53,7 +51,7 @@ export default class ChatDetailPage extends Component {
 
     componentDidMount() {
 
-        if (this.chatInfo === null && this.vendorInfo !== null) {
+        if (this.chatInfo === null) {
             this.getChatInfo();
         } else {
             this.getChatHistory();
@@ -94,10 +92,10 @@ export default class ChatDetailPage extends Component {
         params[API_KEY.LAST_MESSAGE_ID_KEY] = this.state.messages[0]._id;
         params[API_KEY.IS_MEMBER_KEY] = true;
 
-        APICommonService.trackReadLastMsgChat(params).then(resp => {
-        }).catch(err => {
-        }).finally(() => {
-        });
+        // APICommonService.trackReadLastMsgChat(params).then(resp => {
+        // }).catch(err => {
+        // }).finally(() => {
+        // });
     }
 
     initCollectionRef = async () => {
@@ -233,20 +231,24 @@ export default class ChatDetailPage extends Component {
             .catch(reject);
     }
 
-    sendMessage = (msg, type = Constants.CHAT_TYPE.MESSAGE, seccondRecordAudio = 0) => {
+    sendMessage = (msg, type = Constants.CHAT_TYPE.MESSAGE) => {
         if (msg === null || msg === undefined || msg === '' || msg.trim() === '') {
             return;
         }
 
         // Send to server
-        let params = {};
-        params[API_KEY.CHAT_BY_KEY] = Constants.userInfo.id;
-        params[API_KEY.GROUP_ID_KEY] = this.chatInfo._id;
-        params[API_KEY.MESSAGE_KEY] = msg;
-        params[API_KEY.TYPE_KEY] = type;
-        params[API_KEY.IS_MEMBER_KEY] = true;
+        var params = {};
+        params[API_KEY.USER_ID_KEY] = this.chatInfo.msg_uid;
+        params[API_KEY.PAGE_ID_KEY] = this.chatInfo.msg_pid;
+        params[API_KEY.MANAGER_ID_KEY] = this.chatInfo.msg_mng;
+        params[API_KEY.TEXT_MESSAGE_KEY] = msg;
+        params[API_KEY.USER_SEND_KEY] = Constants.USER_ROLE.MANAGER;
+        params[API_KEY.MESSAGE_CHAT_TYPE_KEY] = type;
+        params[API_KEY.ACTION_REQUEST_KEY] = API_URL.CHAT;
+
 
         APICommonService.sendMessage(params).then(resp => {
+            console.tlog('sendMessage RESP', resp);
             if (resp.success) {
                 this.addMessageToFirebase(params);
             }
@@ -323,40 +325,48 @@ export default class ChatDetailPage extends Component {
                 });
             }
 
-            APICommonService.getChatHistory(this.chatInfo._id, offset, 10).then(resp => {
-                console.tlog('getChatHistory RESP', resp);
-                if (resp.data && resp.data.length > 0) {
-                    if (loadPrev) {
-                        let msgTemp = resp.data;
-                        msgTemp = [...this.state.messages, ...msgTemp];
+            let msgId = '';
+            if (this.state.messages && this.state.messages.length > 0) {
+                msgId = this.state.messages[this.state.messages.length - 1].msg_id;
+            }
 
-                        this.setViewState({
-                            messages: msgTemp
-                        })
-                    } else {
-                        this.setViewState({
-                            messages: resp.data
-                        }, () => {
-                            // Tracking latest message readed at the firsttime load message
-                            setTimeout(() => {
-                                this.onTrackReadLatestMsg();
-                            }, 700);
-                        });
+            APICommonService.getHistoryMessage(this.chatInfo.msg_uid,
+                this.chatInfo.msg_pid,
+                this.chatInfo.msg_mng,
+                msgId).then(resp => {
+                    console.tlog('getChatHistory RESP', resp);
+                    if (resp.data && resp.data.length > 0) {
+                        if (loadPrev) {
+                            let msgTemp = resp.data;
+                            msgTemp = [...this.state.messages, ...msgTemp];
+
+                            this.setViewState({
+                                messages: msgTemp
+                            })
+                        } else {
+                            this.setViewState({
+                                messages: resp.data
+                            }, () => {
+                                // Tracking latest message readed at the firsttime load message
+                                setTimeout(() => {
+                                    this.onTrackReadLatestMsg();
+                                }, 700);
+                            });
+                        }
                     }
-                }
-            }).catch(err => {
-                console.tlog('getChatHistory ERR', err);
-            }).finally(() => {
-                this.setViewState({
-                    onLoading: false,
-                    isOnRefreshing: false
-                });
+                }).catch(err => {
+                    console.tlog('getChatHistory ERR', err);
+                }).finally(() => {
+                    this.setViewState({
+                        onLoading: false,
+                        isOnRefreshing: false
+                    });
 
-                // Reset is loading data
-                setTimeout(() => {
-                    this.isLoading = false;
-                }, 500);
-            });
+                    // Reset is loading data
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 500);
+                });
         }
     }
 
@@ -408,7 +418,7 @@ export default class ChatDetailPage extends Component {
     }
 
     uploadFileToAmazonS3 = (uploadFile) => {
-        
+
     }
 
     viewImageDetail = (msg) => {
@@ -434,6 +444,10 @@ export default class ChatDetailPage extends Component {
             images={images} />);
     }
 
+    onIconRightOnePress = () => {
+        Util.onLogOut();
+    }
+
     render() {
         let msgRevert = [...this.state.messages];
         // Update unread status -> For my message
@@ -456,7 +470,8 @@ export default class ChatDetailPage extends Component {
             <View style={[styles.container]}>
                 <HeaderChat
                     onBackPress={this.onBackPress}
-                    vendorInfo={this.vendorInfo} />
+                    chatInfo={this.chatInfo}
+                    onIconRightOnePress={this.onIconRightOnePress} />
 
                 <TouchableWithoutFeedback
                     style={{ flex: 1, marginBottom: 15 }}
@@ -485,13 +500,13 @@ export default class ChatDetailPage extends Component {
                     <KeyboardAvoidingView behavior="padding">
                         <BottomChat
                             sendMessage={this.sendMessage}
-                            onAddImagePress={this.onAddImagePress}/>
+                            onAddImagePress={this.onAddImagePress} />
                     </KeyboardAvoidingView>
                     :
                     <View>
                         <BottomChat
                             sendMessage={this.sendMessage}
-                            onAddImagePress={this.onAddImagePress}/>
+                            onAddImagePress={this.onAddImagePress} />
                     </View>
                 }
 

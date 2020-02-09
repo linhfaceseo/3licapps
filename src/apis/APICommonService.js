@@ -2,13 +2,15 @@
 import RestClient from 'react-native-rest-client';
 import Constants from '../utils/Constants';
 
-const API_URL = {
+export const API_URL = {
     SERVER_HOST: 'https://3lichat.us/Server/Service/RequestAction.php', // DEV
 
     GET_PRODUCT_DETAIL: '/api/products',
     LOGOUT: '/api/profile/logout',
     LOGIN: 'Login',
-    GET_CONVERSATION: 'getConversation'
+    GET_CONVERSATION: 'getConversation',
+    GET_MESSAGE: 'getMessage',
+    CHAT: 'Chat'
 }
 
 export const API_KEY = {
@@ -18,6 +20,12 @@ export const API_KEY = {
     ACTION_REQUEST_KEY: 'actionRequest',
     MANAGER_ID_KEY: 'managerID',
     SITE_ID_KEY: 'siteID',
+    USER_ID_KEY: 'userID',
+    PAGE_ID_KEY: 'pageID',
+    MESSAGE_ID_KEY: 'messageID',
+    MESSAGE_CHAT_TYPE_KEY: 'msgType',
+    TEXT_MESSAGE_KEY: 'textMes',
+    USER_SEND_KEY: 'user_send'
 }
 
 class APICommonService extends RestClient {
@@ -65,6 +73,25 @@ class APICommonService extends RestClient {
         } else {
             return null;
         }
+    }
+
+    getHistoryMessage = async (userID, pageID, managerID, messageID = '') => {
+        var params = {};
+        params[API_KEY.USER_ID_KEY] = userID;
+        params[API_KEY.PAGE_ID_KEY] = pageID;
+        params[API_KEY.MANAGER_ID_KEY] = managerID;
+        params[API_KEY.MESSAGE_ID_KEY] = messageID;
+        params[API_KEY.ACTION_REQUEST_KEY] = API_URL.GET_MESSAGE;
+
+        console.tlog('params', params);
+        var resp = await this.POST('?', params);
+        return resp;
+    }
+
+    sendMessage = async (params) => {
+        console.tlog('params', params);
+        var resp = await this.POST('?', params);
+        return resp;
     }
 
     logOut = async () => {

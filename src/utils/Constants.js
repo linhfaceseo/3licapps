@@ -48,6 +48,11 @@ export default module = {
     IMAGE: 2
   },
 
+  USER_ROLE: {
+    USER: 'user',
+    MANAGER: 'manager'
+  },
+
   OPTION_MENU_CHAT_KEY: {
     TRANSLATE: 0,
     COPY: 1,

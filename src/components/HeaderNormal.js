@@ -50,8 +50,8 @@ export default class HeaderNormal extends React.PureComponent {
                     }]}
                 >
                     <Image
-                        style={this.props.rightStyle ? this.props.rightStyle : styles.icon_search_black}
-                        source={this.props.rightResource ? this.props.rightResource : require('./../images/ic_search_black.png')}
+                        style={this.props.rightStyle ? this.props.rightStyle : styles.icon_logout_black}
+                        source={this.props.rightResource ? this.props.rightResource : require('./../images/ic_logout.png')}
                     />
 
                 </TouchableOpacity>}
@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
         width: 7,
         height: 12
     },
-    icon_search_black: {
-        width: 16,
-        height: 16,
+    icon_logout_black: {
+        width: 25,
+        height: 25,
     },
     textHeader: {
         fontSize: 16,

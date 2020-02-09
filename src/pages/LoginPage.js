@@ -8,14 +8,13 @@
 
 import React, { Component } from 'react';
 import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import HeaderNormal from '../components/HeaderNormal';
+import { EventRegister } from 'react-native-event-listeners';
 import APICommonService from '../apis/APICommonService';
+import HeaderNormal from '../components/HeaderNormal';
 import i18n from '../translations/i18n';
 import ColorApp from '../utils/ColorApp';
 import Constants from '../utils/Constants';
 import * as Util from './../utils/Util';
-import { checkAndAskPNSPermissionFirstTime } from '../permissionApp/FCMPermission';
-import { EventRegister } from 'react-native-event-listeners';
 
 
 class LoginPage extends Component {
@@ -28,7 +27,7 @@ class LoginPage extends Component {
 
 
     this.state = {
-      onLoading: true
+      onLoading: false
     };
 
   }
@@ -36,7 +35,7 @@ class LoginPage extends Component {
   componentDidMount() {
     
     EventRegister.addEventListener(Constants.APP_EVENT_KEY.SUCCESS_GET_FCM_TOKEN, () => {
-      this.callSignWithEmail(true);
+      this.getSavedUserInfoLogin();
     })    
   }
 
@@ -57,7 +56,7 @@ class LoginPage extends Component {
       this.email = userInfo.managerEmail;
       this.password = userInfo.password;
 
-      this.onLoginPress();
+      this.callSignWithEmail();
     } else {
       this.setViewState({
         onLoading: false

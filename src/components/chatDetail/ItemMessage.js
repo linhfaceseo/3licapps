@@ -7,33 +7,15 @@ import ColorApp from "../../utils/ColorApp";
 import Constants from "../../utils/Constants";
 import { getParsedDate } from '../../utils/TimeHelper';
 
-import { EventRegister } from "react-native-event-listeners";
-
-
 export default class ItemMessage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            forceLoad: false,
-            isPlayingMedia: false,
-            isPause: false,
-            totalTime: props.msg.second_record ? Math.floor(props.msg.second_record / 1000) : 0,
-            currentPayingTime: props.msg.second_record ? Math.floor(props.msg.second_record / 1000) : 0,
-
-            // Tracking progress
-            durationAudio: 0,
-            currentPositionAudio: 0
+            forceLoad: false
         }
     }
 
     componentDidMount() {
-        this.playAudioLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.PLAY_AUDIO_ACTION, (indexPlay) => {
-            if (indexPlay !== this.props.index) {
-                if (this.state.isPlayingMedia) {
-                    this.onStopPlay();
-                }
-            }
-        })
     }
 
     setViewState = (...params) => {
@@ -42,11 +24,7 @@ export default class ItemMessage extends Component {
     };
 
     componentWillUnmount() {
-        this.onStopPlay();
         this.hadUnmount = true;
-        if (this.playAudioLst) {
-            EventRegister.removeEventListener(this.playAudioLst);
-        }
     }
 
     _onOpenImageDetail = msg => {
@@ -54,7 +32,7 @@ export default class ItemMessage extends Component {
             this.props.viewImageDetail(msg);
         }
     };
-    
+
     render() {
         let { msg } = this.props;
 
@@ -67,13 +45,11 @@ export default class ItemMessage extends Component {
         let isUnread;
         let borderView = 10;
 
-        message = msg.message;
+        message = msg.msg;
 
-        let ownerUserId = Constants.userInfo.id;
-
-        if (msg.chat_by === ownerUserId) {
+        if (msg.msg_send === Constants.USER_ROLE.MANAGER) {
             isMine = true;
-            isUnread = msg.is_unread;
+            isUnread = msg.msg_status;
         }
 
         isShowAttachment =
@@ -85,7 +61,7 @@ export default class ItemMessage extends Component {
             isShowText = true;
         }
 
-        let chatDate = moment(msg.send_at).toDate();
+        let chatDate = moment(msg.msg_time).toDate();
         chatTime = getParsedDate(chatDate);
 
         return (
@@ -149,8 +125,8 @@ export default class ItemMessage extends Component {
                                     >
                                         {isShowText && (
                                             <TouchableOpacity
-                                                activeOpacity={Constants.OPACITY_BUTTON}
-                                                ref={"tv_message"}                                               
+                                                activeOpacity={1}
+                                                ref={"tv_message"}
                                             >
                                                 <Text
                                                     style={{
