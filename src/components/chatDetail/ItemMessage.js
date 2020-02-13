@@ -42,14 +42,16 @@ export default class ItemMessage extends Component {
         let isShowText;
         let isShowAttachment;
         let imgType;
-        let isUnread;
+        let isUnread = true;
         let borderView = 10;
 
         message = msg.msg;
 
         if (msg.msg_send === Constants.USER_ROLE.MANAGER) {
             isMine = true;
-            isUnread = msg.msg_status;
+            if(msg.msg_status === 1 || msg.msg_status === '1') {
+                isUnread = false;
+            }
         }
 
         isShowAttachment =

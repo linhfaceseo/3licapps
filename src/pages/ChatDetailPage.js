@@ -92,9 +92,8 @@ export default class ChatDetailPage extends Component {
     onTrackReadLatestMsg = () => {
         let params = {};
         params[API_KEY.GROUP_ID_KEY] = this.chatInfo._id;
-        params[API_KEY.SEEN_BY_KEY] = Constants.userInfo.id;
-        params[API_KEY.LAST_MESSAGE_ID_KEY] = this.state.messages[0]._id;
-        params[API_KEY.IS_MEMBER_KEY] = true;
+        params[API_KEY.SEEN_BY_KEY] = Constants.USER_ROLE.MANAGER;
+        params[API_KEY.LAST_MESSAGE_ID_KEY] = this.state.messages[0].msg_id;
 
         // APICommonService.trackReadLastMsgChat(params).then(resp => {
         // }).catch(err => {
@@ -105,8 +104,7 @@ export default class ChatDetailPage extends Component {
     initCollectionRef = async () => {
         if (!this.ColRef) {
             const db = firebase.firestore();
-            // this.ColRef = db.collection(this.chatInfo.msg_FireBaseGroupChat);
-            this.ColRef = db.collection('messages/Chat1475_201_3'); 
+            this.ColRef = db.collection(this.chatInfo.msg_FireBaseGroupChat);
             this.ColReadStatusRef = db.collection(this.chatInfo.msg_FireBaseGroupCheckRead);
         }
         if (this.ColRef) {
@@ -141,7 +139,7 @@ export default class ChatDetailPage extends Component {
 
                         /* Check if partner send message, we reset all unread messages */
                         if (this.chatInfo && data.msg_send === Constants.USER_ROLE.USER) {
-                            this.chatInfo.number_of_unread = 0;
+                            this.chatInfo.msg_number_unread_message = 0;
                         }
 
                         // Update status read to firebase
@@ -175,7 +173,7 @@ export default class ChatDetailPage extends Component {
                         if (data && data.msg_send === Constants.USER_ROLE.USER) {
                             // Reset all un-read message from partner
                             if (this.chatInfo) {
-                                this.chatInfo.number_of_unread = 0;
+                                this.chatInfo.msg_number_unread_message = 0;
                             }
                             // UPdate view
                             let msgs = [...this.state.messages];
@@ -191,12 +189,12 @@ export default class ChatDetailPage extends Component {
 
 
     forceRemoveAllMessages = () => {
-        if (this.chatInfo && this.chatInfo.firebase_path && this.chatInfo.firebase_path !== '') {
-            this.deleteCollection(this.chatInfo.firebase_path, 1000);
+        if (this.chatInfo && this.chatInfo.msg_FireBaseGroupChat && this.chatInfo.msg_FireBaseGroupChat !== '') {
+            this.deleteCollection(this.chatInfo.msg_FireBaseGroupChat, 1000);
         }
 
-        if (this.chatInfo && this.chatInfo.firebase_read_path && this.chatInfo.firebase_read_path !== '') {
-            this.deleteCollection(this.chatInfo.firebase_read_path, 500);
+        if (this.chatInfo && this.chatInfo.msg_FireBaseGroupCheckRead && this.chatInfo.msg_FireBaseGroupCheckRead !== '') {
+            this.deleteCollection(this.chatInfo.msg_FireBaseGroupCheckRead, 500);
         }
 
     }
@@ -269,8 +267,7 @@ export default class ChatDetailPage extends Component {
         if (!this.ColRef) {
             try {
                 const db = firebase.firestore();
-                // this.ColRef = db.collection(this.chatInfo.firebase_path);
-                this.ColRef = db.collection('messages/Chat1475_201_3');     
+                this.ColRef = db.collection(this.chatInfo.msg_FireBaseGroupChat);
             } catch (error) {
                 console.tlog('setReadStatusToFirebase-err', error)
             }
@@ -474,17 +471,17 @@ export default class ChatDetailPage extends Component {
         if (msgRevert.length > 0 && this.chatInfo) {
             let count = 0;
             let numberUnread = 0;
-            if (this.chatInfo && this.chatInfo.number_of_unread) {
-                numberUnread = this.chatInfo.number_of_unread;
+            if (this.chatInfo && this.chatInfo.msg_number_unread_message) {
+                numberUnread = this.chatInfo.msg_number_unread_message;
             }
             for (let index = 0; index < msgRevert.length; index++) {
                 const msg = msgRevert[index];
                 if (msg.msg_send === Constants.USER_ROLE.MANAGER) {
                     if (count < numberUnread) {
                         count++;
-                        msg.is_unread = true;
+                        msg.msg_status = 1;
                     } else {
-                        msg.is_unread = false;
+                        msg.msg_status = 0;
                     }
                 }
             }
