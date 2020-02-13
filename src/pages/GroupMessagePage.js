@@ -9,15 +9,14 @@
 import moment from 'moment';
 import React, { Component } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import HeaderNormal from '../components/HeaderNormal';
 import APICommonService from '../apis/APICommonService';
+import HeaderNormal from '../components/HeaderNormal';
+import firebase from '../pns/firebase';
+import i18n from '../translations/i18n';
 import ColorApp from '../utils/ColorApp';
 import Constants from '../utils/Constants';
 import { getParsedDate } from '../utils/TimeHelper';
 import * as Util from '../utils/Util';
-import firebase from '../pns/firebase';
-import i18n from '../translations/i18n';
-import { EventRegister } from 'react-native-event-listeners';
 
 export default class GroupMessagePage extends Component {
 
@@ -125,7 +124,7 @@ export default class GroupMessagePage extends Component {
                 .forEach(element => {
                     if (element.type == 'added') {
                         let data = element.doc.data();
-                        if (data.chat_by !== Constants.userInfo.id) {
+                        if (data.msg_send !== Constants.USER_ROLE.MANAGER) {
                             let groupChange = this.state.groupChats.find(item => item._id === data.group_id);
                             if (groupChange) {
                                 groupChange.number_of_unread++;

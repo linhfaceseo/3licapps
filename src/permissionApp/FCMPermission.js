@@ -9,9 +9,9 @@ import { EventRegister } from "react-native-event-listeners";
 
 
 export const checkAndAskPNSPermissionFirstTime = async () => {
+    console.tlog('FCMToken First22222', 'Call FCM');
     const FCM = firebase.messaging();
-
-
+    console.tlog('FCMToken First3333', 'Call FCM333');
     // Check and ask FCM permission for the first time
     let result = await Util.getItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.ASK_PERMISSION_PNS_FIRST_TIME);
 
@@ -76,5 +76,7 @@ export const registerPNSDevice = (FCM) => {
         }
 
         EventRegister.emitEvent(Constants.APP_EVENT_KEY.SUCCESS_GET_FCM_TOKEN);
+    }).catch(err => {
+        console.tlog('FCMToken ERR', err);
     });
 }

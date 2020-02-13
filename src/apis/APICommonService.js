@@ -25,7 +25,8 @@ export const API_KEY = {
     MESSAGE_ID_KEY: 'messageID',
     MESSAGE_CHAT_TYPE_KEY: 'msgType',
     TEXT_MESSAGE_KEY: 'textMes',
-    USER_SEND_KEY: 'user_send'
+    USER_SEND_KEY: 'user_send',
+    GROUP_ID_KEY: 'groupID',
 }
 
 class APICommonService extends RestClient {

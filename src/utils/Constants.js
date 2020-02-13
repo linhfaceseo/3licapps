@@ -80,32 +80,18 @@ export default module = {
   },
 
   ASYNC_STORAGE_KEY: {
-    ALREADY_USING_APP: 'AlreadyUsingAppTing',
-    USER_INFO: 'UserInfoTing',
-    ASK_PERMISSION_PNS_FIRST_TIME: 'AskPermissionPNSFirstTimeTing',
+    ALREADY_USING_APP: 'AlreadyUsingApp3liChat',
+    USER_INFO: 'UserInfo3liChat',
+    ASK_PERMISSION_PNS_FIRST_TIME: 'AskPermissionPNSFirstTime3liChat',
   },
 
   TRANSLATE_KEY: {
-    using_location_title: 'using_location_title',
-    using_location_message: 'using_location_message',
-    request_write_storage_permission_title: 'request_write_storage_permission_title',
-    write_external_storage_permission_message: 'write_external_storage_permission_message',
-    request_record_permission_audio_title: 'request_record_permission_audio_title',
-    record_audio_permission_message: 'record_audio_permission_message',
-    select_language_title: 'select_language_title',
-    welcome_to_ting_msg: 'welcome_to_ting_msg',
 
     confirm_title: 'confirm_title',
     // Login
     login_with_phone_no_title: 'login_with_phone_no_title',
     phone_no_title: 'phone_no_title',
-    next_title: 'next_title',
     terms_policy_condition: 'terms_policy_condition',
-    version: 'version',
-    phone_verification: 'phone_verification',
-    input_code_here: 'input_code_here',
-    done_title: 'done_title',
-    not_a_robot_title: 'not_a_robot_title',
     sign_up_title: 'sign_up_title',
     close_title:'close_title',
     cancel_title:'cancel_title',
@@ -120,10 +106,6 @@ export default module = {
 
     // CHAT
     online: 'online',
-    total_items: 'total_items',
-    track_order: 'track_order',
-    order_again: 'order_again',
-    confirm_received: 'confirm_received',
     sent_an_image_msg_alias:'sent_an_image_msg_alias',
     message_title: 'message_title',
     enter_your_email_title:'enter_your_email_title',
@@ -142,14 +124,7 @@ export default module = {
   },
 
   PNS_TYPE_ID: {
-    ACCEPTED_BY_VENDOR: 'ACCEPTED_BY_VENDOR',
-    REJECT_BY_VENDOR: 'REJECT_BY_VENDOR',
-    START_PICKING_UP_BY_DRIVER: 'START_PICKING_UP_BY_DRIVER',
-    PICKED_UP_FROM_VENDOR_AND_TRANSIT_TO_USER_BY_DRIVER: 'PICKED_UP_FROM_VENDOR_AND_TRANSIT_TO_USER_BY_DRIVER',
-    CANCEL_BY_DRIVER: 'CANCEL_BY_DRIVER',
-    REJECTED_BY_DRIVER: 'REJECTED_BY_DRIVER',
-    DELIVERED_TO_BUYER_BY_DRIVER: 'DELIVERED_TO_BUYER_BY_DRIVER',
-    FAILURE_OF_DELIVERY: 'FAILURE_OF_DELIVERY'
+    USER_SEND_CHAT_MESSAGE: 'UserSendChatMsg'
   },
 
   FONT_NAME: {

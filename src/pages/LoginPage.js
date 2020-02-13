@@ -33,10 +33,17 @@ class LoginPage extends Component {
   }
 
   componentDidMount() {
-    
+    Constants.isHomeOnScreen = true;
+
+    /* Listener when finish get FCM token */
     EventRegister.addEventListener(Constants.APP_EVENT_KEY.SUCCESS_GET_FCM_TOKEN, () => {
       this.getSavedUserInfoLogin();
-    })    
+    });
+
+    /* Add event to listener new PNS */
+    this.onPNSListener = EventRegister.addEventListener(Constants.APP_EVENT_KEY.NEW_NOTIFICATION, (data) => {
+      this.processPnsData(data);
+    });
   }
 
   setViewState = (...params) => {
@@ -47,6 +54,44 @@ class LoginPage extends Component {
   componentWillUnmount() {
     this.hadUnmount = true;
   }
+
+  processPnsData = (pnsData) => {
+    let pnsInfo = pnsData.push_info;
+    let userInteraction = pnsData.userInteraction;
+    console.tlog('pnsData', pnsData);
+
+    let title = '';
+    let message = '';
+    let data = pnsInfo;
+    if (pnsInfo.data) {
+        data = pnsInfo.data;
+    }
+
+    if (data) {
+        title = data.title;
+        message = data.body;
+
+        if (data.push_type === Constants.PNS_TYPE_ID.USER_SEND_CHAT_MESSAGE) {
+            if (userInteraction) {
+                // this.props.navigation.navigate(Constants.PAGE_KEY.MY_ORDER_PAGE_KEY);
+                let chatInfo = { order_id: data.order_id, needToGetDetail: true }
+                this.props.navigation.push(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, chatInfo);
+            } else {
+                Util.showNoticeAlert(title, message, false, () => { });
+                // Util.showConfirmAlert(title, message,
+                //     i18n.t(Constants.TRANSLATE_KEY.order_detail_title),
+                //     i18n.t(Constants.TRANSLATE_KEY.close_title),
+                //     false, () => {
+                //         let orderInfo = { order_id: data.order_id, needToGetDetail: true }
+                //         this.props.navigation.push(Constants.PAGE_KEY.MY_ORDER_DETAIL_PAGE_KEY, orderInfo);
+                //     });
+            }
+
+        } else {
+            Util.showNoticeAlert(title, message, false, () => { });
+        }
+    }
+}
 
   getSavedUserInfoLogin = async () => {
     let userInfo = await Util.getSavedLoginUserInfo();
@@ -107,12 +152,12 @@ class LoginPage extends Component {
 
         EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.DASHBOARD_STACK_KEY);
       } else {
-        if(!autoLogin) {
+        if (!autoLogin) {
           Util.showNoticeAlert('', JSON.stringify(resp), false);
         }
       }
     }).catch(err => {
-      if(!autoLogin) {
+      if (!autoLogin) {
         Util.showNoticeAlert('ERROR', JSON.stringify(err), false);
       }
     }).finally(() => {
