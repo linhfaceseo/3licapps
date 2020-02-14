@@ -180,6 +180,17 @@ export const emailValidator = (e) => {
     return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(e);
 }
 
+export const htmlDecode = (value) => {
+    if (String(value).search("&lt;img") >= 0) {
+        return String(value)
+            .replace(/&lt;img/g, '<img')
+            .replace(/&gt;/g, '>')
+            .replace(/&#39;/g, "'")
+            .replace(/&quot;/g, '"');
+    }
+    return String(value);
+}
+
 export const onLogOut = () => {
     removeKeyItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.USER_INFO);
     EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.LOGIN_STACK_KEY);

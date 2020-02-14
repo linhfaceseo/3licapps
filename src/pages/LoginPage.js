@@ -22,8 +22,8 @@ class LoginPage extends Component {
   constructor(props) {
     super(props);
 
-    this.email = 'knightking30798@gmail.com';
-    this.password = '123456';
+    this.email = '';
+    this.password = '';
 
 
     this.state = {
@@ -202,8 +202,6 @@ class LoginPage extends Component {
                   placeholder={i18n.t(Constants.TRANSLATE_KEY.enter_your_email_title)}
                   placeholderTextColor={ColorApp.blackApp}
                   style={[styles.styleInput, { marginLeft: 35, marginRight: 35 }]}
-
-                  value={'knightking30798@gmail.com'}
                 />
 
                 <TextInput
@@ -217,8 +215,6 @@ class LoginPage extends Component {
                   placeholder={i18n.t(Constants.TRANSLATE_KEY.enter_your_password)}
                   placeholderTextColor={ColorApp.blackApp}
                   style={[styles.styleInput, { marginLeft: 35, marginRight: 35, marginTop: 15 }]}
-
-                  value={'123456'}
                 />
               </View>
 

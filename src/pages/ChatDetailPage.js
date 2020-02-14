@@ -17,12 +17,6 @@ import Constants from '../utils/Constants';
 import * as Util from '../utils/Util';
 import PhotoDetailModal from './PhotoDetailModel';
 
-
-const UPLOAD_FILE_TYPE = {
-    IMAGE: 'Image',
-    FILE: 'File'
-}
-
 export default class ChatDetailPage extends Component {
 
     constructor(props) {
@@ -91,14 +85,18 @@ export default class ChatDetailPage extends Component {
     /* Tracking latest message readed to count total unread */
     onTrackReadLatestMsg = () => {
         let params = {};
-        params[API_KEY.GROUP_ID_KEY] = this.chatInfo._id;
-        params[API_KEY.SEEN_BY_KEY] = Constants.USER_ROLE.MANAGER;
-        params[API_KEY.LAST_MESSAGE_ID_KEY] = this.state.messages[0].msg_id;
+        params[API_KEY.USER_ID_KEY] = this.chatInfo.msg_uid;
+        params[API_KEY.PAGE_ID_KEY] = this.chatInfo.msg_pid;
+        params[API_KEY.MANAGER_ID_KEY] = this.chatInfo.msg_mng;
+        params[API_KEY.USER_SEEN_KEY] = Constants.USER_ROLE.MANAGER;
+        params[API_KEY.MSG_ID_KEY] = this.state.messages[0].msg_id;
 
-        // APICommonService.trackReadLastMsgChat(params).then(resp => {
-        // }).catch(err => {
-        // }).finally(() => {
-        // });
+        params[API_KEY.ACTION_REQUEST_KEY] = API_URL.CHECK_READED_MESSAGE;
+
+        APICommonService.trackReadLastMsgChat(params).then(resp => {
+        }).catch(err => {
+        }).finally(() => {
+        });
     }
 
     initCollectionRef = async () => {
@@ -131,7 +129,7 @@ export default class ChatDetailPage extends Component {
                 .forEach(element => {
                     if (element.type == 'added') {
                         let data = element.doc.data();
-                        console.tlog('DataAdded', data);
+                        console.tlog('DataAdded', data);                        
 
                         // Add message to list
                         let msgs = [...this.state.messages];
@@ -236,8 +234,10 @@ export default class ChatDetailPage extends Component {
     }
 
     sendMessage = (msg, type = Constants.CHAT_TYPE.MESSAGE) => {
-        if (msg === null || msg === undefined || msg === '' || msg.trim() === '') {
-            return;
+        if (type === Constants.CHAT_TYPE.MESSAGE) {
+            if (msg === null || msg === undefined || msg === '' || msg.trim() === '') {
+                return;
+            }
         }
 
         // Send to server
@@ -255,7 +255,7 @@ export default class ChatDetailPage extends Component {
         APICommonService.sendMessage(params).then(resp => {
             console.tlog('sendMessage RESP', resp);
             if (resp.success) {
-                this.addMessageToFirebase(params);
+                this.addMessageToFirebase(resp.data);
             }
         }).catch(err => {
             console.tlog('sendMessage ERR', err);
@@ -275,7 +275,7 @@ export default class ChatDetailPage extends Component {
 
         // Save to firebase
         if (this.ColRef) {
-            params[API_KEY.SEND_AT_KEY] = new Date().getTime();
+            // params[API_KEY.SEND_AT_KEY] = new Date().getTime();
             return this.ColRef.add(params);
         }
     }
@@ -303,7 +303,8 @@ export default class ChatDetailPage extends Component {
         this.setViewState({
             onLoading: true
         });
-        APICommonService.startSingleChat(this.vendorInfo.auto_id).then(resp => {
+
+        APICommonService.getConversationInfo('', '', '').then(resp => {
             if (resp.success) {
                 this.chatInfo = resp.data;
                 this.getChatHistory();
@@ -426,16 +427,10 @@ export default class ChatDetailPage extends Component {
     }
 
     processImageData = (response) => {
-        var imgInfo = {
-            type: UPLOAD_FILE_TYPE.IMAGE,
-            data: response
+        if (response.data) {
+            this.sendMessage(`data:image/png;base64,${response.data}`, Constants.CHAT_TYPE.IMAGE);
+            // this.sendMessage(response.data, Constants.CHAT_TYPE.IMAGE);
         }
-
-        this.uploadFileToAmazonS3(imgInfo);
-    }
-
-    uploadFileToAmazonS3 = (uploadFile) => {
-
     }
 
     viewImageDetail = (msg) => {
@@ -454,7 +449,7 @@ export default class ChatDetailPage extends Component {
 
     buildImageDetailModel = () => {
         let images = [];
-        images.push({ image: this.imgInfo.message });
+        images.push({ image: this.imgInfo.msg });
 
         return (<PhotoDetailModal
             onCloseImageDetailModel={this.onCloseImageDetailModel}

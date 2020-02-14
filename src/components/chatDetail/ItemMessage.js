@@ -163,7 +163,7 @@ export default class ItemMessage extends Component {
 
                                                         <CustomCachedImage
                                                             component={ImageLoad}
-                                                            source={{ uri: msg.message }}
+                                                            source={{ uri: msg.msg }}
                                                             isShowActivity={false}
                                                             style={styles.imgThumb}
                                                         />

@@ -9,8 +9,10 @@ export const API_URL = {
     LOGOUT: '/api/profile/logout',
     LOGIN: 'Login',
     GET_CONVERSATION: 'getConversation',
+    GET_ONE_CONVERSATION: 'getOneConversation',
     GET_MESSAGE: 'getMessage',
-    CHAT: 'Chat'
+    CHAT: 'Chat',
+    CHECK_READED_MESSAGE: 'checkReadedMessage'
 }
 
 export const API_KEY = {
@@ -23,11 +25,13 @@ export const API_KEY = {
     USER_ID_KEY: 'userID',
     PAGE_ID_KEY: 'pageID',
     MESSAGE_ID_KEY: 'messageID',
+    MSG_ID_KEY: 'msg_id',
     MESSAGE_CHAT_TYPE_KEY: 'msgType',
     TEXT_MESSAGE_KEY: 'textMes',
     USER_SEND_KEY: 'msg_send',
     GROUP_ID_KEY: 'groupID',
     SEND_AT_KEY: 'send_at',
+    USER_SEEN_KEY: 'userSeen'
 }
 
 class APICommonService extends RestClient {
@@ -77,6 +81,19 @@ class APICommonService extends RestClient {
         }
     }
 
+    getConversationInfo = async (userID, managerID, pageID) => {
+        var params = {};
+        params[API_KEY.USER_ID_KEY] = userID;
+        params[API_KEY.PAGE_ID_KEY] = pageID;
+        params[API_KEY.MANAGER_ID_KEY] = managerID;
+        params[API_KEY.ACTION_REQUEST_KEY] = API_URL.GET_ONE_CONVERSATION;
+
+        console.tlog('params', params);
+        var resp = await this.POST('?', params);
+        return resp;
+
+    }
+
     getHistoryMessage = async (userID, pageID, managerID, messageID = '') => {
         var params = {};
         params[API_KEY.USER_ID_KEY] = userID;
@@ -91,6 +108,12 @@ class APICommonService extends RestClient {
     }
 
     sendMessage = async (params) => {
+        console.tlog('params', params);
+        var resp = await this.POST('?', params);
+        return resp;
+    }
+
+    trackReadLastMsgChat = async (params) => {
         console.tlog('params', params);
         var resp = await this.POST('?', params);
         return resp;
