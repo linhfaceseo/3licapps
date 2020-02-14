@@ -5,6 +5,7 @@ import ImageLoad from 'react-native-image-placeholder';
 import { CustomCachedImage } from "react-native-img-cache";
 import ColorApp from "../../utils/ColorApp";
 import Constants from "../../utils/Constants";
+import {htmlDecode} from '../../utils/Util';
 import { getParsedDate } from '../../utils/TimeHelper';
 
 export default class ItemMessage extends Component {
@@ -45,6 +46,7 @@ export default class ItemMessage extends Component {
         let isUnread = true;
         let borderView = 10;
 
+        // message = htmlDecode(msg.msg);
         message = msg.msg;
 
         if (msg.msg_send === Constants.USER_ROLE.MANAGER) {

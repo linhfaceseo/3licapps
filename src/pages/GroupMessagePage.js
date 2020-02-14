@@ -106,7 +106,7 @@ export default class GroupMessagePage extends Component {
             let ref = null;
             this.allRefs.push({ ref: ref, isFirstTime: true });
 
-            let ColRef = db.collection(group.firebase_path);
+            let ColRef = db.collection(group.msg_FireBaseGroupChat);
             if (ColRef) {
                 this.listenerMessageChange(index, ColRef);
             }
@@ -124,16 +124,24 @@ export default class GroupMessagePage extends Component {
                 .forEach(element => {
                     if (element.type == 'added') {
                         let data = element.doc.data();
+                        console.tlog('dataAdded', data);
                         if (data.msg_send !== Constants.USER_ROLE.MANAGER) {
-                            let groupChange = this.state.groupChats.find(item => item._id === data.group_id);
+                            let groupChange = this.state.groupChats.find(item => item.msg_GroupChatID === data.msg_GroupChatID);
                             if (groupChange) {
                                 groupChange.msg_number_unread_message++;
-                                groupChange.last_message = data;
+
+                                // Update data lastest message
+                                groupChange.msg = data.msg;
+                                groupChange.msg_time = data.msg_time;
+                                groupChange.msg_chatType = data.msg_chatType;
+                                groupChange.msg_send = data.msg_send;
+                                groupChange.msg_id = data.msg_id;
+
                                 let groups = [...this.state.groupChats];
 
                                 // Re-sort group change to top
-                                if (groupChange._id !== groups[0]._id) {
-                                    groups = groups.filter(group => group._id !== groupChange._id);
+                                if (groupChange.msg_GroupChatID !== groups[0].msg_GroupChatID) {
+                                    groups = groups.filter(group => group.msg_GroupChatID !== groupChange.msg_GroupChatID);
                                     groups.splice(0, 0, groupChange);
                                 }
 
@@ -205,7 +213,7 @@ export default class GroupMessagePage extends Component {
     }
 
     keyExtractor = (item) => {
-        return `${item._id}`;
+        return `${item.msg_GroupChatID}`;
     }
 
     onItemGroupMessageSelect = (group) => {

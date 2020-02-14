@@ -94,7 +94,9 @@ export default class ChatDetailPage extends Component {
         params[API_KEY.ACTION_REQUEST_KEY] = API_URL.CHECK_READED_MESSAGE;
 
         APICommonService.trackReadLastMsgChat(params).then(resp => {
+            console.tlog('onTrackReadLatestMsg RESP', resp);
         }).catch(err => {
+            console.tlog('onTrackReadLatestMsg ERR', resp);
         }).finally(() => {
         });
     }
