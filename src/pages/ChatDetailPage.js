@@ -293,12 +293,12 @@ export default class ChatDetailPage extends Component {
 
         // Save to firebase
         if (this.ColRef) {
-            return this.ColRef.add(params);
+            this.ColRef.add(params);
         }
 
         // Save to firebase Web node
         if (this.ColWebRef) {
-            return this.ColWebRef.add(params);
+            this.ColWebRef.add(params);
         }
     }
 
