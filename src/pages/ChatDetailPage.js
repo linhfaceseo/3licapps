@@ -28,6 +28,13 @@ export default class ChatDetailPage extends Component {
             this.chatInfo = params.chatInfo;
         }
 
+        let numberUnread = 0;
+
+        if (this.chatInfo && this.chatInfo.msg_number_unread_message_manager) {
+            numberUnread = parseInt(this.chatInfo.msg_number_unread_message_manager);
+            this.chatInfo.msg_number_unread_message_manager = numberUnread;
+        }
+
         this.state = {
             onLoading: false,
             messages: [],
@@ -132,15 +139,18 @@ export default class ChatDetailPage extends Component {
                 .forEach(element => {
                     if (element.type == 'added') {
                         let data = element.doc.data();
-                        console.tlog('DataAdded', data);                        
 
                         // Add message to list
                         let msgs = [...this.state.messages];
                         msgs.splice(0, 0, data);
 
                         /* Check if partner send message, we reset all unread messages */
-                        if (this.chatInfo && data.msg_send === Constants.USER_ROLE.USER) {
-                            this.chatInfo.msg_number_unread_message_manager = 0;
+                        if (this.chatInfo) {
+                            if (data.msg_send === Constants.USER_ROLE.USER) {
+                                this.chatInfo.msg_number_unread_message_manager = 0;
+                            } else if (this.chatInfo.msg_number_unread_message_manager > 0) {
+                                this.chatInfo.msg_number_unread_message_manager = this.chatInfo.msg_number_unread_message_manager + 1;
+                            }
                         }
 
                         // Update status read to firebase
@@ -223,10 +233,10 @@ export default class ChatDetailPage extends Component {
                 let index = 0;
                 let batch = db.batch();
                 snapshot.docs.forEach((doc) => {
-                    if(index< size - 1) {
+                    if (index < size - 1) {
                         batch.delete(doc.ref);
                     }
-                    index ++;
+                    index++;
                 });
 
                 return batch.commit().then(() => {
@@ -488,17 +498,19 @@ export default class ChatDetailPage extends Component {
         if (msgRevert.length > 0 && this.chatInfo) {
             let count = 0;
             let numberUnread = 0;
+
             if (this.chatInfo && this.chatInfo.msg_number_unread_message_manager) {
-                numberUnread = this.chatInfo.msg_number_unread_message_manager;
+                numberUnread = parseInt(this.chatInfo.msg_number_unread_message_manager);
             }
+
             for (let index = 0; index < msgRevert.length; index++) {
                 const msg = msgRevert[index];
                 if (msg.msg_send === Constants.USER_ROLE.MANAGER) {
                     if (count < numberUnread) {
                         count++;
-                        msg.msg_status = 1;
-                    } else {
                         msg.msg_status = 0;
+                    } else {
+                        msg.msg_status = 1;
                     }
                 }
             }

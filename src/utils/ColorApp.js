@@ -36,4 +36,8 @@ export default {
     yellow236: 'rgb(236, 171, 7)',
     gray85: 'rgba(85, 84, 84, 0.80)',
     
+
+    ////---Suggest from Phast ---////
+    //#7fffd4
+    ////////
 }
