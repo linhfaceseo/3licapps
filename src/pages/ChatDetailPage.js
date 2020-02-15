@@ -106,6 +106,7 @@ export default class ChatDetailPage extends Component {
             const db = firebase.firestore();
             this.ColRef = db.collection(this.chatInfo.msg_FireBaseGroupChat);
             this.ColReadStatusRef = db.collection(this.chatInfo.msg_FireBaseGroupCheckRead);
+            this.ColWebRef = db.collection(this.chatInfo.msg_FireBaseWebChat);
         }
         if (this.ColRef) {
             this.listenerMessageChange();
@@ -213,14 +214,19 @@ export default class ChatDetailPage extends Component {
         query.get()
             .then((snapshot) => {
                 // When there are no documents left, we are done
-                if (snapshot.size == 0) {
+                if (snapshot.size == 1) {
                     return 0;
                 }
 
                 // Delete documents in a batch
+                let size = snapshot.size;
+                let index = 0;
                 let batch = db.batch();
                 snapshot.docs.forEach((doc) => {
-                    batch.delete(doc.ref);
+                    if(index< size - 1) {
+                        batch.delete(doc.ref);
+                    }
+                    index ++;
                 });
 
                 return batch.commit().then(() => {
@@ -275,10 +281,24 @@ export default class ChatDetailPage extends Component {
             }
         }
 
+        // Add to Web node
+        if (!this.ColWebRef) {
+            try {
+                const db = firebase.firestore();
+                this.ColWebRef = db.collection(this.chatInfo.msg_FireBaseWebChat);
+            } catch (error) {
+                console.tlog('setReadStatusToFirebase-err', error)
+            }
+        }
+
         // Save to firebase
         if (this.ColRef) {
-            // params[API_KEY.SEND_AT_KEY] = new Date().getTime();
             return this.ColRef.add(params);
+        }
+
+        // Save to firebase Web node
+        if (this.ColWebRef) {
+            return this.ColWebRef.add(params);
         }
     }
 
