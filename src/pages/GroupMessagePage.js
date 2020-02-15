@@ -128,7 +128,7 @@ export default class GroupMessagePage extends Component {
                         if (data.msg_send !== Constants.USER_ROLE.MANAGER) {
                             let groupChange = this.state.groupChats.find(item => item.msg_GroupChatID === data.msg_GroupChatID);
                             if (groupChange) {
-                                groupChange.msg_number_unread_message++;
+                                groupChange.msg_number_unread_message_user++;
 
                                 // Update data lastest message
                                 groupChange.msg = data.msg;
@@ -167,7 +167,7 @@ export default class GroupMessagePage extends Component {
         let avatar = '';
         let name = '';
         let lastMsg = '';
-        let numUnread = item.msg_number_unread_message || 0;
+        let numUnread = item.msg_number_unread_message_user || 0;
         let sendTime = '';
 
         if (item.vendor) {

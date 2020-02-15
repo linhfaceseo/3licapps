@@ -140,7 +140,7 @@ export default class ChatDetailPage extends Component {
 
                         /* Check if partner send message, we reset all unread messages */
                         if (this.chatInfo && data.msg_send === Constants.USER_ROLE.USER) {
-                            this.chatInfo.msg_number_unread_message = 0;
+                            this.chatInfo.msg_number_unread_message_manager = 0;
                         }
 
                         // Update status read to firebase
@@ -174,7 +174,7 @@ export default class ChatDetailPage extends Component {
                         if (data && data.msg_send === Constants.USER_ROLE.USER) {
                             // Reset all un-read message from partner
                             if (this.chatInfo) {
-                                this.chatInfo.msg_number_unread_message = 0;
+                                this.chatInfo.msg_number_unread_message_manager = 0;
                             }
                             // UPdate view
                             let msgs = [...this.state.messages];
@@ -488,8 +488,8 @@ export default class ChatDetailPage extends Component {
         if (msgRevert.length > 0 && this.chatInfo) {
             let count = 0;
             let numberUnread = 0;
-            if (this.chatInfo && this.chatInfo.msg_number_unread_message) {
-                numberUnread = this.chatInfo.msg_number_unread_message;
+            if (this.chatInfo && this.chatInfo.msg_number_unread_message_manager) {
+                numberUnread = this.chatInfo.msg_number_unread_message_manager;
             }
             for (let index = 0; index < msgRevert.length; index++) {
                 const msg = msgRevert[index];
