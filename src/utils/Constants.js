@@ -29,6 +29,12 @@ export default module = {
   // Check app already open
   isHomeOnScreen: false,
 
+  // Keep current chat info to check if user have new pns chat
+  currentChatInfo: null,
+
+  // Keep current pnsInfo if user not signed up
+  currentPnsInfo: null,
+
   DATE_TIME_FORMAT: {
     YYYYMMDDHHMMSS: 'YYYY-MM-DD hh:mm:ss',
     DDMMYYYY: 'DD/MM/YYYY',
@@ -77,6 +83,7 @@ export default module = {
     PROCESS_PUSH_FROM_FB: 'ProcessPushFromFirebase',
     NEW_NOTIFICATION: 'HaveNewNotification',
     USER_LOGOUT: 'UserLogout',
+    EXIT_CURRENT_CHAT_PAGE_FOR_NEW_COMMING_CHAT: 'ExitCurrentChatPageForNewCommingChat'
   },
 
   ASYNC_STORAGE_KEY: {
@@ -113,7 +120,9 @@ export default module = {
     signin_title:'signin_title',
     invalid_email_address_msg:'invalid_email_address_msg',
     please_input_password_msg:'please_input_password_msg',
-    please_input_email_msg: 'please_input_email_msg'
+    please_input_email_msg: 'please_input_email_msg',
+
+    go_to_chat_title: 'go_to_chat_title',
 
   },
 
@@ -124,7 +133,7 @@ export default module = {
   },
 
   PNS_TYPE_ID: {
-    USER_SEND_CHAT_MESSAGE: 'UserSendChatMsg'
+    USER_SEND_CHAT_MESSAGE: 'MessageChat'
   },
 
   FONT_NAME: {

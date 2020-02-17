@@ -81,7 +81,11 @@ class APICommonService extends RestClient {
         }
     }
 
-    getConversationInfo = async (userID, managerID, pageID) => {
+    getConversationInfo = async (userID, pageID) => {
+        let managerID = '';
+        if (Constants.userInfo) {
+            managerID = Constants.userInfo.managerID;
+        }
         var params = {};
         params[API_KEY.USER_ID_KEY] = userID;
         params[API_KEY.PAGE_ID_KEY] = pageID;

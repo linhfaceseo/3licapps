@@ -16,6 +16,7 @@ import firebase from '../pns/firebase';
 import Constants from '../utils/Constants';
 import * as Util from '../utils/Util';
 import PhotoDetailModal from './PhotoDetailModel';
+import { EventRegister } from 'react-native-event-listeners';
 
 export default class ChatDetailPage extends Component {
 
@@ -23,9 +24,11 @@ export default class ChatDetailPage extends Component {
         super(props);
         let params = this.props.navigation.state.params;
         this.chatInfo = null;
+        this.pnsInfo = null;
 
         if (params) {
             this.chatInfo = params.chatInfo;
+            this.pnsInfo = params.pnsInfo;
         }
 
         let numberUnread = 0;
@@ -51,10 +54,23 @@ export default class ChatDetailPage extends Component {
     };
 
     componentDidMount() {
+        /* Listener event to kill current chat page for new comming chat */
+        this.exitCurrentChatForNewChatLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.EXIT_CURRENT_CHAT_PAGE_FOR_NEW_COMMING_CHAT, () =>{
+            this.onBackPress();
+        });
 
         if (this.chatInfo === null) {
-            this.getChatInfo();
+            if(this.pnsInfo) {
+                this.getChatInfo();
+            } else {
+                Util.showNoticeAlert('Error', 'Cannot read data!', false, ()=> {
+                    this.onBackPress();
+                })
+            }
         } else {
+            /* Keep current chat info to process when have pns */
+            Constants.currentChatInfo = this.chatInfo;
+
             this.getChatHistory();
 
             this.initCollectionRef();
@@ -66,6 +82,13 @@ export default class ChatDetailPage extends Component {
     }
     componentWillUnmount() {
         this.hadUnmount = true;
+
+        if(this.exitCurrentChatForNewChatLst) {
+            EventRegister.removeEventListener(this.exitCurrentChatForNewChatLst);
+        }
+
+        /* Remove current chat info to process when have pns */
+        Constants.currentChatInfo = null;
 
         this.forceRemoveAllMessages();
 
@@ -336,8 +359,11 @@ export default class ChatDetailPage extends Component {
             onLoading: true
         });
 
-        APICommonService.getConversationInfo('', '', '').then(resp => {
+        APICommonService.getConversationInfo(this.pnsInfo.msg_uid, this.pnsInfo.msg_pid).then(resp => {
             if (resp.success) {
+                /* Keep current chat info to process when have pns */
+                Constants.currentChatInfo = resp.data;
+
                 this.chatInfo = resp.data;
                 this.getChatHistory();
 

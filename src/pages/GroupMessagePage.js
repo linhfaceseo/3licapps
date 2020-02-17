@@ -17,6 +17,7 @@ import ColorApp from '../utils/ColorApp';
 import Constants from '../utils/Constants';
 import { getParsedDate } from '../utils/TimeHelper';
 import * as Util from '../utils/Util';
+import { EventRegister } from 'react-native-event-listeners';
 
 export default class GroupMessagePage extends Component {
 
@@ -36,11 +37,30 @@ export default class GroupMessagePage extends Component {
 
     componentWillUnmount() {
         this.hadUnmount = true;
+        if (this.onPNSListener) {
+            EventRegister.removeEventListener(this.onPNSListener);
+        }
     }
 
     componentDidMount() {
         /* Add event to listener focus to current page */
         this.props.navigation.addListener('didFocus', this.onTabFocus);
+
+        /* Add event to listener new PNS */
+        this.onPNSListener = EventRegister.addEventListener(Constants.APP_EVENT_KEY.NEW_NOTIFICATION, (data) => {
+            this.processPnsData(data);
+        });
+
+        /* Check if user click into pns data chat */
+        if (Constants.currentPnsInfo) {
+            this.props.navigation.navigate(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, {
+                chatInfo: null,
+                pnsInfo: { ...Constants.currentPnsInfo }
+            });
+
+            // Reset pnsInfo
+            Constants.currentPnsInfo = null;
+        }
     }
 
     onTabFocus = () => {
@@ -65,6 +85,9 @@ export default class GroupMessagePage extends Component {
         }
     }
 
+    processPnsData = (pnsData) => {
+        Util.processPNSData(pnsData, true, this.props);
+    }
 
     getGroupChats = (showLoading = true) => {
         if (showLoading) {
@@ -192,7 +215,7 @@ export default class GroupMessagePage extends Component {
 
                     <Image
                         style={styles.avatar}
-                        source={avatar? { uri: avatar }:require('../images/ic_avatar.png')} />
+                        source={avatar ? { uri: avatar } : require('../images/ic_avatar.png')} />
                     <View style={styles.status} />
                     <View style={{
                         flex: 1,

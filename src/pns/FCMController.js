@@ -50,6 +50,7 @@ export default class FCMController extends Component {
 
     processPush = (userInteraction = false) => {
         if (Constants.isHomeOnScreen) {
+            console.tlog('pnsData FCM', this._currentPushInfo);
 
             EventRegister.emitEvent(Constants.APP_EVENT_KEY.NEW_NOTIFICATION, {
                 push_info: this._currentPushInfo,
@@ -77,9 +78,9 @@ export default class FCMController extends Component {
 
 
     _handleOpenPnsFromLaunchingOrBackground = (notificationOpen, isFromBg = true) => {
-        if (!isFromBg) {
-            Constants.isHomeOnScreen = false;
-        }
+        // if (!isFromBg) {
+        //     Constants.isHomeOnScreen = false;
+        // }
 
         if (notificationOpen) {
             const {

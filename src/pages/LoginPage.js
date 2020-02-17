@@ -36,7 +36,7 @@ class LoginPage extends Component {
     Constants.isHomeOnScreen = true;
 
     /* Listener when finish get FCM token */
-    EventRegister.addEventListener(Constants.APP_EVENT_KEY.SUCCESS_GET_FCM_TOKEN, () => {
+    this.successGetFCMTokenLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.SUCCESS_GET_FCM_TOKEN, () => {
       this.getSavedUserInfoLogin();
     });
 
@@ -53,10 +53,18 @@ class LoginPage extends Component {
 
   componentWillUnmount() {
     this.hadUnmount = true;
+    if (this.successGetFCMTokenLst) {
+      EventRegister.removeEventListener(this.successGetFCMTokenLst);
+    }
+    if (this.onPNSListener) {
+      EventRegister.removeEventListener(this.onPNSListener);
+    }
   }
 
   processPnsData = (pnsData) => {
-    let pnsInfo = pnsData.push_info;
+    Util.processPNSData(pnsData, false, this.props);
+
+    /*let pnsInfo = pnsData.push_info;
     let userInteraction = pnsData.userInteraction;
     console.tlog('pnsData', pnsData);
 
@@ -64,34 +72,34 @@ class LoginPage extends Component {
     let message = '';
     let data = pnsInfo;
     if (pnsInfo.data) {
-        data = pnsInfo.data;
+      data = pnsInfo.data;
     }
 
     if (data) {
-        title = data.title;
-        message = data.body;
+      title = data.title;
+      message = data.body;
 
-        if (data.push_type === Constants.PNS_TYPE_ID.USER_SEND_CHAT_MESSAGE) {
-            if (userInteraction) {
-                // this.props.navigation.navigate(Constants.PAGE_KEY.MY_ORDER_PAGE_KEY);
-                let chatInfo = { order_id: data.order_id, needToGetDetail: true }
-                this.props.navigation.push(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, chatInfo);
-            } else {
-                Util.showNoticeAlert(title, message, false, () => { });
-                // Util.showConfirmAlert(title, message,
-                //     i18n.t(Constants.TRANSLATE_KEY.order_detail_title),
-                //     i18n.t(Constants.TRANSLATE_KEY.close_title),
-                //     false, () => {
-                //         let orderInfo = { order_id: data.order_id, needToGetDetail: true }
-                //         this.props.navigation.push(Constants.PAGE_KEY.MY_ORDER_DETAIL_PAGE_KEY, orderInfo);
-                //     });
-            }
-
+      if (data.push_type === Constants.PNS_TYPE_ID.USER_SEND_CHAT_MESSAGE) {
+        if (userInteraction) {
+          // this.props.navigation.navigate(Constants.PAGE_KEY.MY_ORDER_PAGE_KEY);
+          let chatInfo = { order_id: data.order_id, needToGetDetail: true }
+          this.props.navigation.push(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, chatInfo);
         } else {
-            Util.showNoticeAlert(title, message, false, () => { });
+          Util.showNoticeAlert(title, message, false, () => { });
+          // Util.showConfirmAlert(title, message,
+          //     i18n.t(Constants.TRANSLATE_KEY.order_detail_title),
+          //     i18n.t(Constants.TRANSLATE_KEY.close_title),
+          //     false, () => {
+          //         let orderInfo = { order_id: data.order_id, needToGetDetail: true }
+          //         this.props.navigation.push(Constants.PAGE_KEY.MY_ORDER_DETAIL_PAGE_KEY, orderInfo);
+          //     });
         }
-    }
-}
+
+      } else {
+        Util.showNoticeAlert(title, message, false, () => { });
+      }
+    }*/
+  }
 
   getSavedUserInfoLogin = async () => {
     let userInfo = await Util.getSavedLoginUserInfo();

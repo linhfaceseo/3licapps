@@ -1,10 +1,10 @@
 import React from "react";
 import { Alert, AsyncStorage, View } from "react-native";
+import { EventRegister } from "react-native-event-listeners";
 import ImagePicker from "react-native-image-picker";
 import { BallIndicator } from 'react-native-indicators';
 import i18n from "../translations/i18n";
 import Constants from "./Constants";
-import { EventRegister } from "react-native-event-listeners";
 
 // based on iphone 5s's scale
 // Use iPhone8 1x as base size which is 375 x 667
@@ -192,6 +192,90 @@ export const htmlDecode = (value) => {
 }
 
 export const onLogOut = () => {
+    /* Remove current chat info to process when have pns */
+    Constants.currentChatInfo = null;
+
     removeKeyItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.USER_INFO);
     EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.LOGIN_STACK_KEY);
+}
+
+export const processPNSData = (pnsData, isLoggedIn, props) => {
+
+    let pnsInfo = pnsData.push_info;
+    let userInteraction = pnsData.userInteraction;
+
+    let title = '';
+    let message = '';
+    let data = pnsInfo;
+    if (pnsInfo.data) {
+        data = pnsInfo.data;
+    }
+
+    if (data) {
+
+        console.tlog('pnsData-INSIDE: ' + userInteraction, data);
+
+        title = data.title;
+        message = data.msg;
+
+        if (data.pushType === Constants.PNS_TYPE_ID.USER_SEND_CHAT_MESSAGE) {
+            let pnsChatInfo = { msg_uid: data.msg_uid, msg_mng: data.msg_mng, msg_pid: data.msg_pid };
+
+            if (userInteraction) { /* App in background or Killed */
+                if (isLoggedIn) {
+                    processChatFromPNS(pnsChatInfo, props);
+                } else {
+                    /* Keep data, then waiting for logedin */
+                    Constants.currentPnsInfo = pnsChatInfo;
+                }
+            } else { /* App in forceground and then we have pns notify */
+                /* If not logged-in or in chatting page with difference pns chat info, then show alert
+                Other case, we skip process */
+                if (!isLoggedIn || (Constants.currentChatInfo &&
+                    (Constants.currentChatInfo.msg_uid !== pnsChatInfo.msg_uid ||
+                        Constants.currentChatInfo.msg_mng !== pnsChatInfo.msg_mng ||
+                        Constants.currentChatInfo.msg_pid !== pnsChatInfo.msg_pid))) {
+                    showConfirmAlert(title, message,
+                        i18n.t(Constants.TRANSLATE_KEY.go_to_chat_title),
+                        i18n.t(Constants.TRANSLATE_KEY.close_title),
+                        false, () => {
+                            if (isLoggedIn) {
+                                processChatFromPNS(pnsChatInfo, props);
+                            } else {
+                                /* Keep data, then waiting for logedin */
+                                Constants.currentPnsInfo = pnsChatInfo;
+                            }
+                        });
+                }
+            }
+
+        } else {
+            showNoticeAlert(title, message, false, () => { });
+        }
+    }
+}
+
+
+const processChatFromPNS = (pnsChatInfo, props) => {
+    if (Constants.currentChatInfo) {
+        if (Constants.currentChatInfo.msg_uid !== pnsChatInfo.msg_uid ||
+            Constants.currentChatInfo.msg_mng !== pnsChatInfo.msg_mng ||
+            Constants.currentChatInfo.msg_pid !== pnsChatInfo.msg_pid) {
+            /* Kill current chat page */
+            EventRegister.emitEvent(Constants.APP_EVENT_KEY.EXIT_CURRENT_CHAT_PAGE_FOR_NEW_COMMING_CHAT);
+
+            /* Create new chat page */
+            setTimeout(() => {
+                props.navigation.push(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, {
+                    chatInfo: null,
+                    pnsInfo: pnsChatInfo
+                });
+            }, 1000);
+        }
+    } else {
+        props.navigation.push(Constants.PAGE_KEY.CHAT_DETAIL_PAGE_KEY, {
+            chatInfo: null,
+            pnsInfo: pnsChatInfo
+        });
+    }
 }
