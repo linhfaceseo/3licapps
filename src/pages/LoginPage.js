@@ -270,8 +270,8 @@ const styles = StyleSheet.create({
   },
 
   imgLogo: {
-    width: 137,
-    height: 91,
+    width: 101,
+    height: 110,
     marginTop: Constants.isIPhoneX ? 127 : 85,
     marginBottom: Util.scaledSize(48)
   },
