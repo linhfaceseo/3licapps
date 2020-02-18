@@ -253,7 +253,7 @@ class LoginPage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: ColorApp.bg_app
+    backgroundColor: ColorApp.white
   },
 
   styleInput: {
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   btnSignIn: {
     flex: 1,
     height: Constants.HEIGHT_BUTTON,
-    backgroundColor: ColorApp.blackApp,
+    backgroundColor: ColorApp.bg_login,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',

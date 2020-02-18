@@ -14,4 +14,4 @@ Fix Header Search Path SplashScreen: (Có hình minh hoạ trong thư mục hotf
 $(SRCROOT)/../../../../ios/Pods/Headers/Public (Copy dòng này bỏ vào header searh path)
 
 6. Enable PNS (Push) in ios -> 
-
+https://help.apple.com/xcode/mac/current/#/devdfd3d04a1

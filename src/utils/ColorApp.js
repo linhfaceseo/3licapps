@@ -38,7 +38,8 @@ export default {
     
 
     ////---Suggest from Phast ---////
-    bg_app: '#7fffd4'
+    bg_app: '#7fffd4',
+    bg_login: '#0062cc'
 
     ////////
 }
