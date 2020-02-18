@@ -255,7 +255,7 @@ export default class GroupMessagePage extends Component {
                 <HeaderNormal
                     hideLeft={true}
                     title={i18n.t(Constants.TRANSLATE_KEY.message_title)}
-                    customStyleHeader={{ backgroundColor: ColorApp.yellowApp }}
+                    customStyleHeader={{ backgroundColor: ColorApp.bg_app }}
                     showRight={true}
                     onIconRightOnePress={this.onIconRightOnePress}
                     navigation={this.props.navigation}

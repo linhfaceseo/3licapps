@@ -112,7 +112,7 @@ export default class ItemMessage extends Component {
                                         overflow: 'hidden',
                                         borderWidth: 0,
                                         borderColor: 'transparent',
-                                        backgroundColor: isMine ? 'rgba(201,201,201,0.3)' : ColorApp.yellowBtn
+                                        backgroundColor: isMine ? 'rgba(201,201,201,0.3)' : ColorApp.bg_app
                                     }}
                                 >
                                     <View

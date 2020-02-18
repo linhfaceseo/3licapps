@@ -253,7 +253,7 @@ class LoginPage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: ColorApp.yellowApp
+    backgroundColor: ColorApp.bg_app
   },
 
   styleInput: {

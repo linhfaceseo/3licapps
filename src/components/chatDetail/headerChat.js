@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: Constants.HEIGHT_NAVIGATION_BAR,
         flexDirection: "row",
-        backgroundColor: ColorApp.yellowApp,
+        backgroundColor: ColorApp.bg_app,
         alignItems: 'flex-start'
     },
     headerContent: {
