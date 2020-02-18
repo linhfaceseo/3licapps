@@ -57,9 +57,9 @@ export default class ItemMessage extends Component {
         }
 
         isShowAttachment =
-            msg.msg_type !== null && typeof msg.msg_type !== "undefined" && msg.msg_type >= 2;
+            msg.msg_chatType !== null && typeof msg.msg_chatType !== "undefined" && msg.msg_chatType >= 2;
 
-        if (msg.msg_type === Constants.CHAT_TYPE.IMAGE) {
+        if (msg.msg_chatType === Constants.CHAT_TYPE.IMAGE) {
             imgType = true;
         } else {
             isShowText = true;

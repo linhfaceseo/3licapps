@@ -53,7 +53,7 @@ export default class HeaderChat extends Component {
                     />
                 </TouchableOpacity>}
                 <View style={{ flex: 1 }}></View>
-                <TouchableOpacity
+                {false && <TouchableOpacity
                     activeOpacity={Constants.OPACITY_BUTTON}
                     onPress={this.props.onIconRightOnePress}
                     style={[styles.item_headerRight, {
@@ -65,7 +65,7 @@ export default class HeaderChat extends Component {
                         source={this.props.rightResource ? this.props.rightResource : require('../../images/ic_logout.png')}
                     />
 
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </View>
         )
     }
