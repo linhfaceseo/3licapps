@@ -18,6 +18,7 @@ import { checkAndAskPNSPermissionFirstTime } from './src/permissionApp/FCMPermis
 import FCMController from './src/pns/FCMController';
 import ColorApp from './src/utils/ColorApp';
 import Constants from './src/utils/Constants';
+import SocketListener from './src/socketIO/SocketListener';
 
 class App extends Component {
 
@@ -76,7 +77,7 @@ class App extends Component {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar
-          backgroundColor={ColorApp.yellowApp}
+          backgroundColor={ColorApp.bg_app}
           barStyle="dark-content"
         />
         <Stack
@@ -85,6 +86,7 @@ class App extends Component {
         />
 
         <FCMController />
+        <SocketListener/>
       </View>
     );
   }

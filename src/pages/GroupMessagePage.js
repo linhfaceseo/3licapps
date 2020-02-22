@@ -40,9 +40,31 @@ export default class GroupMessagePage extends Component {
         if (this.onPNSListener) {
             EventRegister.removeEventListener(this.onPNSListener);
         }
+
+        if (this.onlineLst) {
+            EventRegister.removeEventListener(this.onlineLst);
+        }
+
+        if (this.offlineLst) {
+            EventRegister.removeEventListener(this.offlineLst);
+        }
     }
 
     componentDidMount() {
+        /* Send event to tracking online */
+        EventRegister.emitEvent(Constants.APP_EVENT_KEY.TRACKING_SOCKET_ADMIN_ONLINE);
+
+        /* Add event listener when have users online/offline */
+        this.onlineLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.IO_USERS_ONLINE, (usersOnline) => {
+            this.usersOnline = usersOnline;
+            this.processUserOnline();
+        });
+
+        /* Add event listener when have users online/offline */
+        this.offlineLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.IO_USER_OFFLINE, (userOffline) => {
+            this.processUserOffline(userOffline);
+        });
+
         /* Add event to listener focus to current page */
         this.props.navigation.addListener('didFocus', this.onTabFocus);
 
@@ -85,6 +107,48 @@ export default class GroupMessagePage extends Component {
         }
     }
 
+    processUserOnline = () => {
+        if (this.state.groupChats && this.state.groupChats.length > 0) {
+            if (this.usersOnline && this.usersOnline.length > 0) {
+                // Update online status
+                for (let index = 0; index < this.state.groupChats.length; index++) {
+                    let group = this.state.groupChats[index];
+                    // Reset first
+                    group.isOnline = false;
+
+                    // Find group user online
+                    let haveOnline = this.usersOnline.find(online => online.user_id === group.msg_GroupChatSocketUser);
+                    if (haveOnline) {
+                        group.isOnline = true;
+                    }
+                }
+            } else {
+                // Reset online = false
+                for (let index = 0; index < this.state.groupChats.length; index++) {
+                    this.state.groupChats[index].isOnline = false;
+                }
+            }
+
+            this.setViewState({
+                groupChats: [...this.state.groupChats]
+            })
+        }
+    }
+
+    processUserOffline = (userOffline) => {
+        if (this.state.groupChats && this.state.groupChats.length > 0) {
+            // Find group user offline
+            let haveGroupOffline = this.state.groupChats.find(group => group.msg_GroupChatSocketUser === userOffline.user_id);
+            if (haveGroupOffline) {
+                haveGroupOffline.isOnline = false;
+            }
+
+            this.setViewState({
+                groupChats: [...this.state.groupChats]
+            })
+        }
+    }
+
     processPnsData = (pnsData) => {
         Util.processPNSData(pnsData, true, this.props);
     }
@@ -99,6 +163,10 @@ export default class GroupMessagePage extends Component {
         APICommonService.getGroupChats().then(resp => {
             console.tlog('resp', resp);
             if (resp.success && resp.data) {
+
+                // Update online status
+                this.processUserOnline();
+
                 this.setViewState({
                     groupChats: resp.data
                 });
@@ -216,7 +284,9 @@ export default class GroupMessagePage extends Component {
                     <Image
                         style={styles.avatar}
                         source={avatar ? { uri: avatar } : require('../images/ic_avatar.png')} />
-                    <View style={styles.status} />
+                    <View style={[styles.status, {
+                        backgroundColor: item.isOnline ? ColorApp.green : ColorApp.gray165
+                    }]} />
                     <View style={{
                         flex: 1,
                         marginRight: 5

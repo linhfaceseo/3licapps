@@ -5,6 +5,7 @@ export default module = {
 
   fcmToken: '',
   userInfo: null,
+
   deviceW: getDeviceResolution(true),
   deviceH: getDeviceResolution(false),
   isIOS: checkIOS(),
@@ -83,7 +84,12 @@ export default module = {
     PROCESS_PUSH_FROM_FB: 'ProcessPushFromFirebase',
     NEW_NOTIFICATION: 'HaveNewNotification',
     USER_LOGOUT: 'UserLogout',
-    EXIT_CURRENT_CHAT_PAGE_FOR_NEW_COMMING_CHAT: 'ExitCurrentChatPageForNewCommingChat'
+    EXIT_CURRENT_CHAT_PAGE_FOR_NEW_COMMING_CHAT: 'ExitCurrentChatPageForNewCommingChat',
+
+    // Socket io
+    TRACKING_SOCKET_ADMIN_ONLINE: 'TrackingSocketAdminOnline',
+    IO_USERS_ONLINE: 'IOUsersOnlineEvent',
+    IO_USER_OFFLINE: 'IOUserOfflineEvent',
   },
 
   ASYNC_STORAGE_KEY: {
@@ -113,6 +119,7 @@ export default module = {
 
     // CHAT
     online: 'online',
+    offline: 'offline',
     sent_an_image_msg_alias:'sent_an_image_msg_alias',
     message_title: 'message_title',
     enter_your_email_title:'enter_your_email_title',

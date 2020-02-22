@@ -20,6 +20,7 @@ export default {
     [Constants.TRANSLATE_KEY.cancel_title]: 'Cancel',
 
     [Constants.TRANSLATE_KEY.online]: 'online',
+    [Constants.TRANSLATE_KEY.offline]: 'offline',
 
     [Constants.TRANSLATE_KEY.enter_your_email_title]: 'Enter your email',
     [Constants.TRANSLATE_KEY.signin_title]: 'Sign In',

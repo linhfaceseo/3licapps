@@ -53,7 +53,7 @@ export default class ChatDetailPage extends Component {
         this.setState(...params);
     };
 
-    componentDidMount() {
+    componentDidMount() {        
         /* Listener event to kill current chat page for new comming chat */
         this.exitCurrentChatForNewChatLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.EXIT_CURRENT_CHAT_PAGE_FOR_NEW_COMMING_CHAT, () =>{
             this.onBackPress();
@@ -542,12 +542,18 @@ export default class ChatDetailPage extends Component {
             }
         }
 
+        let isOnline = true;
+        if(this.chatInfo) {
+            isOnline = this.chatInfo.isOnline;
+        }
+
         return (
             <View style={[styles.container]}>
                 <HeaderChat
                     onBackPress={this.onBackPress}
                     chatInfo={this.chatInfo}
-                    onIconRightOnePress={this.onIconRightOnePress} />
+                    onIconRightOnePress={this.onIconRightOnePress}
+                    isOnline={isOnline} />
 
                 <TouchableWithoutFeedback
                     style={{ flex: 1, marginBottom: 15 }}
