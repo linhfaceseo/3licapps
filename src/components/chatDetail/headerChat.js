@@ -4,6 +4,7 @@ import Constants from "../../utils/Constants";
 import ColorApp from "../../utils/ColorApp";
 import i18n from "../../translations/i18n";
 import { EventRegister } from "react-native-event-listeners";
+import Communications from "react-native-communications";
 
 export default class HeaderChat extends Component {
 
@@ -61,6 +62,14 @@ export default class HeaderChat extends Component {
         });
     }
 
+    onPhoneClick = (phone) => {
+        try {
+            Communications.phonecall(phone, true);
+        } catch (error) {
+            console.tlog('cat', JSON.stringify(error))
+        }
+    }
+
     render() {
         const { hideLeft, chatInfo } = this.props;
 
@@ -78,7 +87,12 @@ export default class HeaderChat extends Component {
                     <Image
                         style={styles.avatar}
                         source={avatar} />
-                    <View style={{ justifyContent: 'flex-start' }}>
+                    <TouchableOpacity
+                        activeOpacity={Constants.OPACITY_BUTTON}
+                        style={{ justifyContent: 'flex-start' }}
+                        onPress={() => {
+                            this.onPhoneClick(name);
+                        }}>
                         <Text
                             numberOfLines={1}
                             ellipsizeMode='tail'
@@ -90,7 +104,7 @@ export default class HeaderChat extends Component {
                             }]}></View>
                             <Text style={styles.statusText}>{this.state.isOnline ? i18n.t(Constants.TRANSLATE_KEY.online) : i18n.t(Constants.TRANSLATE_KEY.offline)}</Text>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 </View>
 
                 {!hideLeft && <TouchableOpacity
