@@ -8,7 +8,7 @@
 
 import moment from 'moment';
 import React, { Component } from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {StatusBar, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import APICommonService from '../apis/APICommonService';
 import HeaderNormal from '../components/HeaderNormal';
 import firebase from '../pns/firebase';
@@ -51,6 +51,8 @@ export default class GroupMessagePage extends Component {
     }
 
     componentDidMount() {
+
+        StatusBar.setBackgroundColor(ColorApp.bg_app, false);
         /* Send event to tracking online */
         EventRegister.emitEvent(Constants.APP_EVENT_KEY.TRACKING_SOCKET_ADMIN_ONLINE);
 
@@ -97,9 +99,9 @@ export default class GroupMessagePage extends Component {
         }
 
         // Update view first
-        this.setViewState({
-            groupChats: []
-        });
+        // this.setViewState({
+        //     groupChats: []
+        // });
 
         // Get new data
         if (Constants.userInfo) {

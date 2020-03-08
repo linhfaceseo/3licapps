@@ -218,7 +218,7 @@ export const processPNSData = (pnsData, isLoggedIn, props) => {
         title = data.title;
         message = data.msg;
 
-        if (data.pushType === Constants.PNS_TYPE_ID.USER_SEND_CHAT_MESSAGE) {
+        if (data.pushType === Constants.PNS_TYPE_ID.USER_SEND_CHAT_MESSAGE && data.msg_send !== Constants.USER_ROLE.MANAGER) {
             let pnsChatInfo = { msg_uid: data.msg_uid, msg_mng: data.msg_mng, msg_pid: data.msg_pid };
 
             if (userInteraction) { /* App in background or Killed */

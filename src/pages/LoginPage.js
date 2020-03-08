@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {StatusBar, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import APICommonService from '../apis/APICommonService';
 import HeaderNormal from '../components/HeaderNormal';
@@ -33,6 +33,8 @@ class LoginPage extends Component {
   }
 
   componentDidMount() {
+    StatusBar.setBackgroundColor(ColorApp.white, false);
+
     Constants.isHomeOnScreen = true;
 
     /* Listener when finish get FCM token */
