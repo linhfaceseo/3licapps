@@ -223,6 +223,8 @@ export default class ChatDetailPage extends Component {
 
 
     forceRemoveAllMessages = () => {
+        return;
+        
         if (this.chatInfo && this.chatInfo.msg_FireBaseGroupChat && this.chatInfo.msg_FireBaseGroupChat !== '') {
             this.deleteCollection(this.chatInfo.msg_FireBaseGroupChat, 1000);
         }

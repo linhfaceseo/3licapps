@@ -21,7 +21,7 @@ export default class PhotoDetailModal extends Component {
 
     componentWillUnmount() {
         this.hadUnmount = true;
-        StatusBar.setBackgroundColor(ColorApp.yellowApp, false);
+        StatusBar.setBackgroundColor(ColorApp.bg_app, false);
     }
 
     componentDidMount() {
