@@ -8,7 +8,7 @@
 
 import moment from 'moment';
 import React, { Component } from 'react';
-import {StatusBar, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StatusBar, FlatList, Image, StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
 import APICommonService from '../apis/APICommonService';
 import HeaderNormal from '../components/HeaderNormal';
 import firebase from '../pns/firebase';
@@ -262,6 +262,16 @@ export default class GroupMessagePage extends Component {
         let lastMsg = '';
         let numUnread = item.msg_number_unread_message_user || 0;
         let sendTime = '';
+        let showPageName = false;
+        let pageName = item.PageName;
+        if (!pageName || pageName === '') {
+            pageName = item.PageLink;
+        }
+        if (pageName && pageName !== '') {
+            pageName = pageName.trim();
+            showPageName = true;
+        }
+
 
         if (item.vendor) {
             avatar = item.vendor.image;
@@ -281,27 +291,42 @@ export default class GroupMessagePage extends Component {
                     this.onItemGroupMessageSelect(item);
                 }}
                 style={styles.msgItem}>
-                <View style={{ flexDirection: 'row' }}>
+                <View>
+                    <View style={{ flexDirection: 'row' }}>
 
-                    <Image
-                        style={styles.avatar}
-                        source={avatar ? { uri: avatar } : require('../images/ic_avatar.png')} />
-                    <View style={[styles.status, {
-                        backgroundColor: item.isOnline ? ColorApp.green : ColorApp.gray165
-                    }]} />
-                    <View style={{
-                        flex: 1,
-                        marginRight: 5
-                    }}>
-                        <Text style={styles.name}>{name}</Text>
-                        <Text numberOfLines={2} ellipsizeMode='tail' style={{ marginTop: 5 }}>{lastMsg}</Text>
-                    </View>
-                    <View style={{ alignItems: 'flex-end' }}>
-                        <View style={[styles.outTextNumber, { backgroundColor: numUnread > 0 ? ColorApp.yellowBtn : ColorApp.transparent }]}>
-                            <Text style={styles.textNumber}>{numUnread > 0 ? numUnread : ''}</Text>
+                        <Image
+                            style={styles.avatar}
+                            source={avatar ? { uri: avatar } : require('../images/ic_avatar.png')} />
+                        <View style={[styles.status, {
+                            backgroundColor: item.isOnline ? ColorApp.green : ColorApp.gray165
+                        }]} />
+                        <View style={{
+                            flex: 1,
+                            marginRight: 5
+                        }}>
+                            <Text style={styles.name}>{name}</Text>
+                            <Text numberOfLines={2} ellipsizeMode='tail' style={{ marginTop: 5 }}>{lastMsg}</Text>
                         </View>
-                        <Text style={[styles.msgTime, { marginTop: 2 }]}>{sendTime}</Text>
+                        <View style={{ alignItems: 'flex-end' }}>
+                            <View style={[styles.outTextNumber, { backgroundColor: numUnread > 0 ? ColorApp.yellowBtn : ColorApp.transparent }]}>
+                                <Text style={styles.textNumber}>{numUnread > 0 ? numUnread : ''}</Text>
+                            </View>
+                            <Text style={[styles.msgTime, { marginTop: 2 }]}>{sendTime}</Text>
+                        </View>
                     </View>
+                    {showPageName && <TouchableOpacity
+                        disabled={true}
+                        activeOpacity={Constants.OPACITY_BUTTON}
+                        style={{ marginLeft: 73 }}
+                        onPress={() => {
+                            if (item.PageLink && item.PageLink !== '') {
+                                Linking.openURL(item.PageLink);
+                            }
+                        }}>
+                        <Text
+                            numberOfLines={2}
+                            style={{ color: ColorApp.blueApp, textDecorationLine: 'underline', fontStyle: 'italic' }}>{pageName}</Text>
+                    </TouchableOpacity>}
                 </View>
             </TouchableOpacity>
         );

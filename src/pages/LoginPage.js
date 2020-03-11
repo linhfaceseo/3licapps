@@ -197,7 +197,7 @@ class LoginPage extends Component {
                 style={styles.imgLogo} />
 
               <Text style={styles.textTitle}>
-                {i18n.t(Constants.TRANSLATE_KEY.login_with_phone_no_title)}
+                {i18n.t(Constants.TRANSLATE_KEY.login_with_email_title)}
               </Text>
 
               <View style={{ width: '100%' }}>

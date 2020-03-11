@@ -1,6 +1,6 @@
 import Constants from './../utils/Constants';
 export default {
-    [Constants.TRANSLATE_KEY.login_with_phone_no_title]: 'Login with your phone number',
+    [Constants.TRANSLATE_KEY.login_with_email_title]: 'Login with your email address',
     [Constants.TRANSLATE_KEY.phone_no_title]: 'Phone number',
     [Constants.TRANSLATE_KEY.terms_policy_condition]: "By using our services you agree to our\n [Terms of Service](<%__TERM_URL__%>) & [Privacy Policy](<%__POLICY_URL__%>)",
 

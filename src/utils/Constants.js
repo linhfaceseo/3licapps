@@ -102,7 +102,7 @@ export default module = {
 
     confirm_title: 'confirm_title',
     // Login
-    login_with_phone_no_title: 'login_with_phone_no_title',
+    login_with_email_title: 'login_with_email_title',
     phone_no_title: 'phone_no_title',
     terms_policy_condition: 'terms_policy_condition',
     sign_up_title: 'sign_up_title',
