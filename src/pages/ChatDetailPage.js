@@ -391,7 +391,7 @@ export default class ChatDetailPage extends Component {
         });
     }
 
-    getChatHistory = (offset = 0, loadPrev = false) => {
+    getChatHistory = (loadPrev = false) => {
 
         /* Check if is loading, skip load data */
         if (!this.isLoading) {
@@ -458,7 +458,7 @@ export default class ChatDetailPage extends Component {
     }
 
     keyExtractor = (item) => {
-        return `${item.auto_id || item._id || item.id}`;
+        return `${item.msg_id}`;
     }
 
     onLoadPrevMsg = () => {
@@ -470,7 +470,7 @@ export default class ChatDetailPage extends Component {
             }
             if (!this.isLoading) {
                 this.interval = setInterval(() => {
-                    this.getChatHistory(this.state.messages.length, true);
+                    this.getChatHistory(true);
                     clearInterval(this.interval);
                 }, 500);
             }
