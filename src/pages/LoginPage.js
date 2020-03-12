@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { StatusBar, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StatusBar, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Linking } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import APICommonService from '../apis/APICommonService';
 import HeaderNormal from '../components/HeaderNormal';
@@ -244,6 +244,18 @@ class LoginPage extends Component {
                   }}
                   style={styles.btnSignIn}>
                   <Text style={styles.textButton}>{i18n.t(Constants.TRANSLATE_KEY.signin_title).toUpperCase()}</Text>
+                </TouchableOpacity>
+
+              </View>
+
+              <View style={[{ marginTop: 20 }]}>
+                <TouchableOpacity
+                  activeOpacity={Constants.OPACITY_BUTTON}
+                  onPress={() => {
+                    Linking.openURL('https://3lichat.us/chatManager/ForgotPassword.php');
+                  }}
+                  style={{}}>
+                  <Text style={[styles.textButton, { fontWeight: 'bold', color: ColorApp.bg_login, paddingTop: 5, paddingBottom: 5 }]}>{i18n.t(Constants.TRANSLATE_KEY.forgot_pass_title)}</Text>
                 </TouchableOpacity>
 
               </View>

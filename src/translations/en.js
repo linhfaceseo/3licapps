@@ -37,4 +37,5 @@ export default {
 
     [Constants.TRANSLATE_KEY.go_to_chat_title]: "Go to Chat",
     [Constants.TRANSLATE_KEY.login_err_msg]: 'Your request has not been successful! \nPlease check your email/password or internet connection and try again!',
+    [Constants.TRANSLATE_KEY.forgot_pass_title]: "Forgot Password?",
 }

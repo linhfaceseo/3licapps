@@ -131,7 +131,8 @@ export default module = {
 
     go_to_chat_title: 'go_to_chat_title',
 
-    login_err_msg: 'login_err_msg'
+    login_err_msg: 'login_err_msg',
+    forgot_pass_title: 'forgot_pass_title',
   },
 
   APP_STATE_KEYS: {
