@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import {StatusBar, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StatusBar, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import APICommonService from '../apis/APICommonService';
 import HeaderNormal from '../components/HeaderNormal';
@@ -163,12 +163,20 @@ class LoginPage extends Component {
         EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.DASHBOARD_STACK_KEY);
       } else {
         if (!autoLogin) {
-          Util.showNoticeAlert('', JSON.stringify(resp), false);
+          let message = i18n.t(Constants.TRANSLATE_KEY.login_err_msg);
+          if (resp && resp.message && resp.message !== '') {
+            message = resp.message;
+          }
+          Util.showNoticeAlert('', message, false);
         }
       }
     }).catch(err => {
       if (!autoLogin) {
-        Util.showNoticeAlert('ERROR', JSON.stringify(err), false);
+        let message = i18n.t(Constants.TRANSLATE_KEY.login_err_msg);
+        if (err && err.message && err.message !== '') {
+          message = err.message;
+        }
+        Util.showNoticeAlert('', message, false);
       }
     }).finally(() => {
       this.setViewState({

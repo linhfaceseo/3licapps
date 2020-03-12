@@ -194,6 +194,7 @@ export const htmlDecode = (value) => {
 export const onLogOut = () => {
     /* Remove current chat info to process when have pns */
     Constants.currentChatInfo = null;
+    Constants.userInfo = null;
 
     removeKeyItemAsyncStorage(Constants.ASYNC_STORAGE_KEY.USER_INFO);
     EventRegister.emitEvent(Constants.APP_EVENT_KEY.CHANGE_STACK_NOTIFY_KEY, Constants.STACK_SCREEN_KEY.LOGIN_STACK_KEY);

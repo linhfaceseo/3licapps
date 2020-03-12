@@ -36,4 +36,5 @@ export default {
     [Constants.TRANSLATE_KEY.please_input_email_msg]: "Please input your email address",
 
     [Constants.TRANSLATE_KEY.go_to_chat_title]: "Go to Chat",
+    [Constants.TRANSLATE_KEY.login_err_msg]: 'Your request has not been successful! \nPlease check your email/password or internet connection and try again!',
 }
