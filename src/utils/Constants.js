@@ -36,6 +36,9 @@ export default module = {
   // Keep current pnsInfo if user not signed up
   currentPnsInfo: null,
 
+  // Check app in foreground or background
+  appInBackground: false,
+
   DATE_TIME_FORMAT: {
     YYYYMMDDHHMMSS: 'YYYY-MM-DD hh:mm:ss',
     DDMMYYYY: 'DD/MM/YYYY',

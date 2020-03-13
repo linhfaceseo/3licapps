@@ -36,7 +36,7 @@ export default class HeaderChat extends Component {
         this.onlineLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.IO_USERS_ONLINE, (usersOnline) => {
             const { chatInfo } = this.props;
 
-            if (!chatInfo.isOnline && usersOnline && usersOnline.length > 0) {
+            if (chatInfo && !chatInfo.isOnline && usersOnline && usersOnline.length > 0) {
                 // Find group user online
                 let haveOnline = usersOnline.find(online => online.user_id === chatInfo.msg_GroupChatSocketUser);
                 if (haveOnline) {
@@ -52,7 +52,7 @@ export default class HeaderChat extends Component {
         /* Add event listener when have users online/offline */
         this.offlineLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.IO_USER_OFFLINE, (userOffline) => {
             const { chatInfo } = this.props;
-            if (chatInfo.isOnline && userOffline.user_id === chatInfo.msg_GroupChatSocketUser) {
+            if (chatInfo && chatInfo.isOnline && userOffline.user_id === chatInfo.msg_GroupChatSocketUser) {
                 chatInfo.isOnline = false;
 
                 this.setViewState({

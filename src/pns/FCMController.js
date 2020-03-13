@@ -146,14 +146,15 @@ export default class FCMController extends Component {
 
     handleActive = () => {
         //EventRegister.emitEvent(GLOBAL.APP_EVENT.RELOAD_HOME_PAGE);
+        Constants.appInBackground = false;
     };
 
     handleInactive = () => {
-
+        Constants.appInBackground = true;
     };
 
     handleBackground = () => {
-
+        Constants.appInBackground = true;
     };
 
     render() {

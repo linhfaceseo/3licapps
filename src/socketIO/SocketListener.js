@@ -12,6 +12,9 @@ export default class SocketListener extends Component {
     }
 
     componentWillUnmount() {
+        if (this.trackignAdminOnline) {
+            EventRegister.removeEventListener(this.trackignAdminOnline);
+        }
     }
 
     componentDidMount() {
@@ -19,7 +22,7 @@ export default class SocketListener extends Component {
         this.socket.on('UserOnline', (data) => {
             console.tlog('SocketIOClient UserOnline', data);
             let usersOnline = [];
-            if(data && data.listUserOnline) {
+            if (data && data.listUserOnline) {
                 usersOnline = data.listUserOnline;
             }
 
@@ -29,13 +32,36 @@ export default class SocketListener extends Component {
         /* Listener users offline */
         this.socket.on('UserOffline', (data) => {
             console.tlog('SocketIOClient UserOffline', data);
-            if(data && data.User) {
+            if (data && data.User) {
                 EventRegister.emitEvent(Constants.APP_EVENT_KEY.IO_USER_OFFLINE, data.User);
             }
         });
 
+
+        this.socket.on("needSendMessage", (data) => {
+
+            console.tlog('SocketIOClient needSendMessage DATA', data);
+            /*data: {
+                "sendID": 1
+            }*/
+
+            // If already logged-in and app in foreground -> Do not send pns to notify
+            if (Constants.userInfo && !Constants.appInBackground) {
+                console.tlog('SocketIOClient needSendMessage', 'Khong can SEND');
+                var dataSend = { IDneed: data.sendID, needSend: false };
+                this.socket.emit("needSendMessage", dataSend);
+            } else {
+                console.tlog('SocketIOClient needSendMessage', 'SEND PSN nhe');
+            }
+        });
+
+
+        /*var dataSend = {IDneed: data.sendID,needSend:true};
+        socket.emit('needSendMessage' dataSend);
+         */
+
         /* Add event listener when user success login to notify admin is online */
-        EventRegister.addEventListener(Constants.APP_EVENT_KEY.TRACKING_SOCKET_ADMIN_ONLINE, () => {
+        this.trackignAdminOnline = EventRegister.addEventListener(Constants.APP_EVENT_KEY.TRACKING_SOCKET_ADMIN_ONLINE, () => {
             let params = {};
             if (Constants.userInfo) {
                 params.user_id = Constants.userInfo.managerConnectSocket;
