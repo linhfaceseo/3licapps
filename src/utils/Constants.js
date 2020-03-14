@@ -93,6 +93,9 @@ export default module = {
     TRACKING_SOCKET_ADMIN_ONLINE: 'TrackingSocketAdminOnline',
     IO_USERS_ONLINE: 'IOUsersOnlineEvent',
     IO_USER_OFFLINE: 'IOUserOfflineEvent',
+
+    // App status
+    APP_ACTIVE_FOREGROUND: 'AppInActiveForgroundNotify',
   },
 
   ASYNC_STORAGE_KEY: {

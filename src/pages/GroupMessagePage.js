@@ -261,6 +261,12 @@ export default class GroupMessagePage extends Component {
         let name = '';
         let lastMsg = '';
         let numUnread = item.msg_number_unread_message_user || 0;
+        let numUnreadDisplay = '';
+        if(numUnread > 99) {
+            numUnreadDisplay = '99+';
+        } else if(numUnread > 0) {
+            numUnreadDisplay = `${numUnread}`;
+        }
         let sendTime = '';
         let showPageName = false;
         let pageName = item.PageName;
@@ -309,7 +315,7 @@ export default class GroupMessagePage extends Component {
                         </View>
                         <View style={{ alignItems: 'flex-end' }}>
                             <View style={[styles.outTextNumber, { backgroundColor: numUnread > 0 ? ColorApp.yellowBtn : ColorApp.transparent }]}>
-                                <Text style={styles.textNumber}>{numUnread > 0 ? numUnread : ''}</Text>
+                                <Text style={styles.textNumber}>{numUnreadDisplay}</Text>
                             </View>
                             <Text style={[styles.msgTime, { marginTop: 2 }]}>{sendTime}</Text>
                         </View>
@@ -410,9 +416,9 @@ const styles = StyleSheet.create({
         color: ColorApp.blackApp
     },
     outTextNumber: {
-        width: 18,
-        height: 18,
-        borderRadius: 18,
+        width: 20,
+        height: 20,
+        borderRadius: 20,
         backgroundColor: ColorApp.yellowBtn,
         // alignItems: 'center',
         justifyContent: 'center',

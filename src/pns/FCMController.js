@@ -145,7 +145,10 @@ export default class FCMController extends Component {
     }
 
     handleActive = () => {
-        //EventRegister.emitEvent(GLOBAL.APP_EVENT.RELOAD_HOME_PAGE);
+        // Post event to notify app in active
+        // EventRegister.emitEvent(Constants.APP_EVENT_KEY.APP_ACTIVE_FOREGROUND);
+
+        // Keep status
         Constants.appInBackground = false;
     };
 
