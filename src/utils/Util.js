@@ -205,6 +205,7 @@ export const processPNSData = (pnsData, isLoggedIn, props) => {
     let pnsInfo = pnsData.push_info;
     let userInteraction = pnsData.userInteraction;
 
+    let userName = 'Client';
     let title = '';
     let message = '';
     let data = pnsInfo;
@@ -216,10 +217,14 @@ export const processPNSData = (pnsData, isLoggedIn, props) => {
 
         console.tlog('pnsData-INSIDE: ' + userInteraction, data);
 
-        title = data.title;
+        if (data.msg_userPhoneNumber) {
+            userName = data.msg_userPhoneNumber;
+        }
+        title = `${userName} ${data.title}`;
         message = data.msg;
 
-        if (data.pushType === Constants.PNS_TYPE_ID.USER_SEND_CHAT_MESSAGE && data.msg_send !== Constants.USER_ROLE.MANAGER) {
+        if (data.pushType === Constants.PNS_TYPE_ID.USER_SEND_CHAT_MESSAGE && 
+            data.msg_send !== Constants.USER_ROLE.MANAGER) {
             let pnsChatInfo = { msg_uid: data.msg_uid, msg_mng: data.msg_mng, msg_pid: data.msg_pid };
 
             if (userInteraction) { /* App in background or Killed */
@@ -230,12 +235,12 @@ export const processPNSData = (pnsData, isLoggedIn, props) => {
                     Constants.currentPnsInfo = pnsChatInfo;
                 }
             } else { /* App in forceground and then we have pns notify */
-                /* If not logged-in or in chatting page with difference pns chat info, then show alert
+                /* If not logged-in or at Listing page or in chatting page with difference pns chat info, then show alert
                 Other case, we skip process */
-                if (!isLoggedIn || (Constants.currentChatInfo &&
+                if (!isLoggedIn || !Constants.currentChatInfo ||
                     (Constants.currentChatInfo.msg_uid !== pnsChatInfo.msg_uid ||
                         Constants.currentChatInfo.msg_mng !== pnsChatInfo.msg_mng ||
-                        Constants.currentChatInfo.msg_pid !== pnsChatInfo.msg_pid))) {
+                        Constants.currentChatInfo.msg_pid !== pnsChatInfo.msg_pid)) {
                     showConfirmAlert(title, message,
                         i18n.t(Constants.TRANSLATE_KEY.go_to_chat_title),
                         i18n.t(Constants.TRANSLATE_KEY.close_title),

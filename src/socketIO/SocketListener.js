@@ -41,13 +41,13 @@ export default class SocketListener extends Component {
 
         /* Add event listener when app in active */
         // this.appActiveLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.APP_ACTIVE_FOREGROUND, () => {
-            // Remove listener first
-            // this.removeSocketListener();
+        // Remove listener first
+        // this.removeSocketListener();
 
-            // Init again
-            // this.onInitSocketIO();
+        // Init again
+        // this.onInitSocketIO();
 
-            // this.onTrackingOnline();
+        // this.onTrackingOnline();
         // });
     }
 
@@ -64,12 +64,12 @@ export default class SocketListener extends Component {
         if (this.socket) {
             this.socket.on('connect', (data) => {
                 this.onTrackingOnline();
-                console.tlog('SocketIOClient Connection Status', `${data}`);
+                // console.tlog('SocketIOClient Connection Status', `${data}`);
             });
 
             /* Listener users online */
             this.socket.on('UserOnline', (data) => {
-                console.tlog('SocketIOClient UserOnline', data);
+                // console.tlog('SocketIOClient UserOnline', data);
                 let usersOnline = [];
                 if (data && data.listUserOnline) {
                     usersOnline = data.listUserOnline;
@@ -80,7 +80,7 @@ export default class SocketListener extends Component {
 
             /* Listener users offline */
             this.socket.on('UserOffline', (data) => {
-                console.tlog('SocketIOClient UserOffline', data);
+                // console.tlog('SocketIOClient UserOffline', data);
                 if (data && data.User) {
                     EventRegister.emitEvent(Constants.APP_EVENT_KEY.IO_USER_OFFLINE, data.User);
                 }
@@ -89,18 +89,25 @@ export default class SocketListener extends Component {
 
             this.socket.on("needSendMessage", (data) => {
 
-                console.tlog('SocketIOClient needSendMessage DATA', data);
+                // console.tlog('SocketIOClient needSendMessage DATA', data);
                 /*data: {
-                    "sendID": 1
+                    "sendID": 1,
+                    "userID": 2,
+                    "pageID": 33
                 }*/
+                if (data) {
+                    let isLoggedIn = false;
+                    if (Constants.userInfo) {
+                        isLoggedIn = true;
+                    }
 
-                // If already logged-in and app in foreground -> Do not send pns to notify
-                if (Constants.userInfo && !Constants.appInBackground) {
-                    console.tlog('SocketIOClient needSendMessage', 'Khong can SEND');
-                    var dataSend = { IDneed: data ? data.sendID : '', needSend: false };
-                    this.socket.emit("needSendMessage", dataSend);
-                } else {
-                    console.tlog('SocketIOClient needSendMessage', 'SEND PSN nhe');
+                    // Check send pns or not
+                    if ((Constants.currentChatInfo &&
+                        (Constants.currentChatInfo.msg_uid === data.userID &&
+                            Constants.currentChatInfo.msg_pid === data.pageID))) {
+                        var dataSend = { IDneed: data ? data.sendID : '', needSend: false };
+                        this.socket.emit("needSendMessage", dataSend);
+                    }
                 }
             });
         }
