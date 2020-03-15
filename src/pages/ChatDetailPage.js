@@ -569,7 +569,7 @@ export default class ChatDetailPage extends Component {
                         data={msgRevert}
                         renderItem={this.renderListItem}
                         keyExtractor={this.keyExtractor}
-                        showsVerticalScrollIndicator={false}
+                        // showsVerticalScrollIndicator={false}
                         inverted={true}
                         refreshing={this.state.isOnRefreshing}
                         onEndReached={this.onLoadPrevMsg}
