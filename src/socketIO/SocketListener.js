@@ -69,7 +69,7 @@ export default class SocketListener extends Component {
 
             /* Listener users online */
             this.socket.on('UserOnline', (data) => {
-                // console.tlog('SocketIOClient UserOnline', data);
+                console.tlog('SocketIOClient UserOnline', data);
                 let usersOnline = [];
                 if (data && data.listUserOnline) {
                     usersOnline = data.listUserOnline;
@@ -80,7 +80,7 @@ export default class SocketListener extends Component {
 
             /* Listener users offline */
             this.socket.on('UserOffline', (data) => {
-                // console.tlog('SocketIOClient UserOffline', data);
+                console.tlog('SocketIOClient UserOffline', data);
                 if (data && data.User) {
                     EventRegister.emitEvent(Constants.APP_EVENT_KEY.IO_USER_OFFLINE, data.User);
                 }

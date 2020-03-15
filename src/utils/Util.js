@@ -208,6 +208,7 @@ export const processPNSData = (pnsData, isLoggedIn, props) => {
     let userName = 'Client';
     let title = '';
     let message = '';
+    let pageName = '';
     let data = pnsInfo;
     if (pnsInfo.data) {
         data = pnsInfo.data;
@@ -221,7 +222,13 @@ export const processPNSData = (pnsData, isLoggedIn, props) => {
             userName = data.msg_userPhoneNumber;
         }
         title = `${userName} ${data.title}`;
-        message = data.msg;
+
+        if(data.msg_pageName) {
+            pageName = `From page: ${data.msg_pageName.trim()}`;
+        } else if(data.msg_pageLink) {
+            pageName = `From page: ${data.msg_pageLink.trim()}`;
+        }
+        message = `${data.msg}\n\n${pageName}`;
 
         if (data.pushType === Constants.PNS_TYPE_ID.USER_SEND_CHAT_MESSAGE && 
             data.msg_send !== Constants.USER_ROLE.MANAGER) {

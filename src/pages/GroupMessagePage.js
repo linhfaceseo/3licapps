@@ -6,18 +6,17 @@
  * @flow
  */
 
-import moment from 'moment';
 import React, { Component } from 'react';
-import { StatusBar, FlatList, Image, StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
+import { FlatList, StatusBar, StyleSheet, View } from 'react-native';
+import { EventRegister } from 'react-native-event-listeners';
 import APICommonService from '../apis/APICommonService';
+import ItemGroup from '../components/groupListChat/ItemGroup';
 import HeaderNormal from '../components/HeaderNormal';
 import firebase from '../pns/firebase';
 import i18n from '../translations/i18n';
 import ColorApp from '../utils/ColorApp';
 import Constants from '../utils/Constants';
-import { getParsedDate } from '../utils/TimeHelper';
 import * as Util from '../utils/Util';
-import { EventRegister } from 'react-native-event-listeners';
 
 export default class GroupMessagePage extends Component {
 
@@ -59,7 +58,7 @@ export default class GroupMessagePage extends Component {
         /* Add event listener when have users online/offline */
         this.onlineLst = EventRegister.addEventListener(Constants.APP_EVENT_KEY.IO_USERS_ONLINE, (usersOnline) => {
             this.usersOnline = usersOnline;
-            this.processUserOnline();
+            this.processUserOnline(this.state.groupChats);
         });
 
         /* Add event listener when have users online/offline */
@@ -98,23 +97,19 @@ export default class GroupMessagePage extends Component {
             }
         }
 
-        // Update view first
-        // this.setViewState({
-        //     groupChats: []
-        // });
-
         // Get new data
         if (Constants.userInfo) {
             this.getGroupChats();
         }
     }
 
-    processUserOnline = () => {
-        if (this.state.groupChats && this.state.groupChats.length > 0) {
+    processUserOnline = (groups) => {
+        if (groups && groups.length > 0) {
+            let groupChatCopy = [...groups];
             if (this.usersOnline && this.usersOnline.length > 0) {
                 // Update online status
-                for (let index = 0; index < this.state.groupChats.length; index++) {
-                    let group = this.state.groupChats[index];
+                for (let index = 0; index < groupChatCopy.length; index++) {
+                    let group = groupChatCopy[index];
                     // Reset first
                     group.isOnline = false;
 
@@ -126,28 +121,29 @@ export default class GroupMessagePage extends Component {
                 }
             } else {
                 // Reset online = false
-                for (let index = 0; index < this.state.groupChats.length; index++) {
-                    this.state.groupChats[index].isOnline = false;
+                for (let index = 0; index < groupChatCopy.length; index++) {
+                    groupChatCopy[index].isOnline = false;
                 }
             }
 
             this.setViewState({
-                groupChats: [...this.state.groupChats]
-            })
+                groupChats: groupChatCopy
+            });
         }
     }
 
     processUserOffline = (userOffline) => {
         if (this.state.groupChats && this.state.groupChats.length > 0) {
+            let groupChatCopy = [...this.state.groupChats];
             // Find group user offline
-            let haveGroupOffline = this.state.groupChats.find(group => group.msg_GroupChatSocketUser === userOffline.user_id);
+            let haveGroupOffline = groupChatCopy.find(group => group.msg_GroupChatSocketUser === userOffline.user_id);
             if (haveGroupOffline) {
                 haveGroupOffline.isOnline = false;
             }
 
             this.setViewState({
-                groupChats: [...this.state.groupChats]
-            })
+                groupChats: groupChatCopy
+            });
         }
     }
 
@@ -165,17 +161,13 @@ export default class GroupMessagePage extends Component {
         APICommonService.getGroupChats().then(resp => {
             console.tlog('resp', resp);
             if (resp.success && resp.data) {
-
-                // Update online status
-                this.processUserOnline();
-
-                this.setViewState({
-                    groupChats: resp.data
-                });
-
                 if (resp.data.length > 0) {
                     this.initCollectionRef(resp.data);
                 }
+
+                // Update online status
+                this.processUserOnline(resp.data);
+
             } else {
                 Util.showNoticeAlert('', resp.message, false);
             }
@@ -257,84 +249,10 @@ export default class GroupMessagePage extends Component {
     }
 
     renderListItem = ({ item }) => {
-        let avatar = '';
-        let name = '';
-        let lastMsg = '';
-        let numUnread = item.msg_number_unread_message_user || 0;
-        let numUnreadDisplay = '';
-        if(numUnread > 99) {
-            numUnreadDisplay = '99+';
-        } else if(numUnread > 0) {
-            numUnreadDisplay = `${numUnread}`;
-        }
-        let sendTime = '';
-        let showPageName = false;
-        let pageName = item.PageName;
-        if (!pageName || pageName === '') {
-            pageName = item.PageLink;
-        }
-        if (pageName && pageName !== '') {
-            pageName = pageName.trim();
-            showPageName = true;
-        }
-
-
-        if (item.vendor) {
-            avatar = item.vendor.image;
-            name = item.vendor.name;
-        }
-        lastMsg = item.msg;
-        let chatDate = moment(item.msg_time).toDate();
-        sendTime = getParsedDate(chatDate);
-        if (item.type === Constants.CHAT_TYPE.IMAGE) {
-            lastMsg = i18n.t(Constants.TRANSLATE_KEY.sent_an_image_msg_alias);
-        }
-
         return (
-            <TouchableOpacity
-                activeOpacity={Constants.OPACITY_BUTTON}
-                onPress={() => {
-                    this.onItemGroupMessageSelect(item);
-                }}
-                style={styles.msgItem}>
-                <View>
-                    <View style={{ flexDirection: 'row' }}>
-
-                        <Image
-                            style={styles.avatar}
-                            source={avatar ? { uri: avatar } : require('../images/ic_avatar.png')} />
-                        <View style={[styles.status, {
-                            backgroundColor: item.isOnline ? ColorApp.green : ColorApp.gray165
-                        }]} />
-                        <View style={{
-                            flex: 1,
-                            marginRight: 5
-                        }}>
-                            <Text style={styles.name}>{name}</Text>
-                            <Text numberOfLines={2} ellipsizeMode='tail' style={{ marginTop: 5 }}>{lastMsg}</Text>
-                        </View>
-                        <View style={{ alignItems: 'flex-end' }}>
-                            <View style={[styles.outTextNumber, { backgroundColor: numUnread > 0 ? ColorApp.yellowBtn : ColorApp.transparent }]}>
-                                <Text style={styles.textNumber}>{numUnreadDisplay}</Text>
-                            </View>
-                            <Text style={[styles.msgTime, { marginTop: 2 }]}>{sendTime}</Text>
-                        </View>
-                    </View>
-                    {showPageName && <TouchableOpacity
-                        disabled={true}
-                        activeOpacity={Constants.OPACITY_BUTTON}
-                        style={{ marginLeft: 73 }}
-                        onPress={() => {
-                            if (item.PageLink && item.PageLink !== '') {
-                                Linking.openURL(item.PageLink);
-                            }
-                        }}>
-                        <Text
-                            numberOfLines={2}
-                            style={{ color: ColorApp.blueApp, textDecorationLine: 'underline', fontStyle: 'italic' }}>{pageName}</Text>
-                    </TouchableOpacity>}
-                </View>
-            </TouchableOpacity>
+            <ItemGroup
+                item={item}
+                onItemGroupMessageSelect={this.onItemGroupMessageSelect} />
         );
     }
 
@@ -383,57 +301,6 @@ export default class GroupMessagePage extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1
-    },
-    msgItem: {
-        paddingTop: 15,
-        paddingBottom: 15,
-        paddingRight: 15,
-        paddingLeft: 15,
-        borderBottomColor: ColorApp.gray205_207_214,
-        borderBottomWidth: 1
-    },
-    avatar: {
-        marginRight: 15,
-        width: 58,
-        height: 58,
-        resizeMode: 'cover',
-        borderRadius: 58,
-    },
-    status: {
-        position: 'absolute',
-        left: 40,
-        bottom: 0,
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: 'white',
-        width: 12,
-        height: 12,
-        backgroundColor: ColorApp.green
-    },
-    name: {
-        fontSize: 16,
-        // fontFamily: Constants.FONT_NAME.LATO_BOLD,
-        color: ColorApp.blackApp
-    },
-    outTextNumber: {
-        width: 20,
-        height: 20,
-        borderRadius: 20,
-        backgroundColor: ColorApp.yellowBtn,
-        // alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 6,
-    },
-    textNumber: {
-        color: ColorApp.blackApp,
-        fontSize: 10,
-        textAlign: 'center',
-        // fontFamily: Constants.FONT_NAME.LATO_BOLD
-    },
-    msgTime: {
-        color: ColorApp.gray165,
-        fontSize: 12,
-        // fontFamily: Constants.FONT_NAME.LATO_REGULAR,
     }
 });
 
