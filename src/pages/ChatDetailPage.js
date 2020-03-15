@@ -458,7 +458,7 @@ export default class ChatDetailPage extends Component {
     }
 
     keyExtractor = (item) => {
-        return `${item.msg_id}`;
+        return `${item.msg_id}${item.msg_time}`;
     }
 
     onLoadPrevMsg = () => {
@@ -573,7 +573,7 @@ export default class ChatDetailPage extends Component {
                         inverted={true}
                         refreshing={this.state.isOnRefreshing}
                         onEndReached={this.onLoadPrevMsg}
-                        onEndReachedThreshold={0}
+                        onEndReachedThreshold={0.5}
                         windowSize={15}
                         initialNumToRender={5}
                         removeClippedSubviews={true}
