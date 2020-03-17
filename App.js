@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Easing, StatusBar, View } from 'react-native';
+import { Easing, StatusBar, View, Linking } from 'react-native';
 import { EventRegister } from "react-native-event-listeners";
 import SplashScreen from 'react-native-smart-splash-screen';
 import { createAppContainer, createStackNavigator } from "react-navigation";
@@ -18,7 +18,11 @@ import { checkAndAskPNSPermissionFirstTime } from './src/permissionApp/FCMPermis
 import FCMController from './src/pns/FCMController';
 import ColorApp from './src/utils/ColorApp';
 import Constants from './src/utils/Constants';
+import *as Util from './src/utils/Util';
 import SocketListener from './src/socketIO/SocketListener';
+import APICommonService, { API_KEY, API_URL } from './src/apis/APICommonService';
+import i18n from './src/translations/i18n';
+import RNExitApp from "react-native-exit-app";
 
 class App extends Component {
 
@@ -40,8 +44,8 @@ class App extends Component {
 
     this.onCloseSplashScreen();
 
-    // Ask FCM permission
-    checkAndAskPNSPermissionFirstTime();
+    // Check new version app
+    this.onCheckNewVersionApp();
   }
 
   componentWillUnmount() {
@@ -55,6 +59,69 @@ class App extends Component {
     if (!!this.hadUnmount) return;
 
     this.setState(...params);
+  }
+
+  onCheckNewVersionApp = () => {
+    // Check new version app
+    let params = {};
+    params[API_KEY.CURRENT_VERSION_KEY] = Constants.versionCode
+
+    params[API_KEY.ACTION_REQUEST_KEY] = API_URL.CHECK_NEW_VERSION_APP;
+
+    APICommonService.checkNewVersionApp(params).then(resp => {
+      console.tlog('onCheckNewVersionApp', resp);
+      if (resp && resp.success && resp.data && resp.data.newVersionAvailable) {
+        let headerTitle = i18n.t(Constants.TRANSLATE_KEY.new_version_available_title);
+        let updateTitle = i18n.t(Constants.TRANSLATE_KEY.update_title);
+        let cancelTitle = i18n.t(Constants.TRANSLATE_KEY.not_now_title);
+        if (resp.data.forceUpdate) {
+          Util.showNoticeAlert(
+            headerTitle,
+            resp.data.msg || 'Bugs and stability fixes',
+            false,
+            () => {
+              if (resp.data.url && resp.data.url !== '') {
+                Linking.openURL(resp.data.url).then(() => {
+                  RNExitApp.exitApp();
+                });
+              } else {
+                RNExitApp.exitApp();
+              }
+            },
+            updateTitle
+          );
+        } else {
+          Util.showConfirmAlert(
+            headerTitle,
+            resp.data.msg || 'Bugs and stability fixes',
+            updateTitle,
+            cancelTitle,
+            false,
+            // Confirm
+            () => {
+              if (resp.data.url && resp.data.url !== '') {
+                Linking.openURL(resp.data.url).then(() => {
+                  RNExitApp.exitApp();
+                });
+              }
+            },
+            // Cancel
+            () => {
+              // Ask FCM permission
+              checkAndAskPNSPermissionFirstTime();
+            }
+          );
+        }
+      } else {
+        // Ask FCM permission
+        checkAndAskPNSPermissionFirstTime();
+      }
+    }).catch(err => {
+      console.tlog('onCheckNewVersionApp ERR', JSON.stringify(err));
+
+      // Ask FCM permission
+      checkAndAskPNSPermissionFirstTime();
+    });
   }
 
   onCloseSplashScreen = () => {
@@ -86,7 +153,7 @@ class App extends Component {
         />
 
         <FCMController />
-        <SocketListener/>
+        <SocketListener />
       </View>
     );
   }

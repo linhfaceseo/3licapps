@@ -10,6 +10,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.github.wumke.RNExitApp.RNExitAppPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.reactcommunity.rnlanguages.RNLanguagesPackage;
@@ -57,7 +58,8 @@ public class MainApplication extends Application implements ReactApplication {
                             new RNFirebasePackage(),
                             new RNFirebaseNotificationsPackage(),
                             new RNFirebaseMessagingPackage(),
-                            new RNFirebaseFirestorePackage()
+                            new RNFirebaseFirestorePackage(),
+                            new RNExitAppPackage()
                     );
                 }
 

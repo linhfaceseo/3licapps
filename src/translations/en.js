@@ -38,4 +38,8 @@ export default {
     [Constants.TRANSLATE_KEY.go_to_chat_title]: "Go to Chat",
     [Constants.TRANSLATE_KEY.login_err_msg]: 'Your request has not been successful! \nPlease check your email/password or internet connection and try again!',
     [Constants.TRANSLATE_KEY.forgot_pass_title]: "Forgot Password?",
+
+    [Constants.TRANSLATE_KEY.new_version_available_title]: "New Version Available",
+    [Constants.TRANSLATE_KEY.update_title]: "Update",
+    [Constants.TRANSLATE_KEY.not_now_title]: "Not Now",
 }

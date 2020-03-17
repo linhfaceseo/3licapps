@@ -5,7 +5,7 @@ import Constants from '../utils/Constants';
 export const API_URL = {
     SERVER_HOST: 'https://3lichat.us/Server/Service/RequestAction.php', // DEV
 
-    GET_PRODUCT_DETAIL: '/api/products',
+    CHECK_NEW_VERSION_APP: 'checkNewVersionAPP',
     LOGOUT: '/api/profile/logout',
     LOGIN: 'Login',
     GET_CONVERSATION: 'getConversation',
@@ -31,7 +31,8 @@ export const API_KEY = {
     USER_SEND_KEY: 'msg_send',
     GROUP_ID_KEY: 'groupID',
     SEND_AT_KEY: 'send_at',
-    USER_SEEN_KEY: 'userSeen'
+    USER_SEEN_KEY: 'userSeen',
+    CURRENT_VERSION_KEY: 'currVersion'
 }
 
 class APICommonService extends RestClient {
@@ -118,6 +119,12 @@ class APICommonService extends RestClient {
     }
 
     trackReadLastMsgChat = async (params) => {
+        console.tlog('params', params);
+        var resp = await this.POST('?', params);
+        return resp;
+    }
+
+    checkNewVersionApp = async (params) => {
         console.tlog('params', params);
         var resp = await this.POST('?', params);
         return resp;

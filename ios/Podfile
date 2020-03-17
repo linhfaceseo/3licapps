@@ -39,6 +39,8 @@ target 'chat3li' do
 #  pod 'Firebase/Analytics'
   pod 'Firebase/Firestore'
   
+  pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
+
   target 'chat3liTests' do
     inherit! :search_paths
     # Pods for testing

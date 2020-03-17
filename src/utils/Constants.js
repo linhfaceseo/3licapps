@@ -39,6 +39,9 @@ export default module = {
   // Check app in foreground or background
   appInBackground: false,
 
+  // Update version code when build
+  versionCode: 1,
+
   DATE_TIME_FORMAT: {
     YYYYMMDDHHMMSS: 'YYYY-MM-DD hh:mm:ss',
     DDMMYYYY: 'DD/MM/YYYY',
@@ -139,6 +142,10 @@ export default module = {
 
     login_err_msg: 'login_err_msg',
     forgot_pass_title: 'forgot_pass_title',
+
+    new_version_available_title: 'new_version_available_title',
+    update_title: 'update_title',
+    not_now_title: 'not_now_title',
   },
 
   APP_STATE_KEYS: {
