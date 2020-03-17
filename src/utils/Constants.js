@@ -40,7 +40,7 @@ export default module = {
   appInBackground: false,
 
   // Update version code when build
-  versionCode: 1,
+  versionCode: 4,
 
   DATE_TIME_FORMAT: {
     YYYYMMDDHHMMSS: 'YYYY-MM-DD hh:mm:ss',

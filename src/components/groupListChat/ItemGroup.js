@@ -81,7 +81,7 @@ export default class ItemGroup extends Component {
                         </View>
                     </View>
                     {showPageName && <TouchableOpacity
-                        disabled={true}
+                        disabled={false}
                         activeOpacity={Constants.OPACITY_BUTTON}
                         style={{ marginLeft: 73 }}
                         onPress={() => {

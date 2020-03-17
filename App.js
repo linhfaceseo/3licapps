@@ -65,6 +65,7 @@ class App extends Component {
     // Check new version app
     let params = {};
     params[API_KEY.CURRENT_VERSION_KEY] = Constants.versionCode
+    params[API_KEY.PLAT_FORM_KEY] = Constants.isIOS ? 'ios' : 'android'
 
     params[API_KEY.ACTION_REQUEST_KEY] = API_URL.CHECK_NEW_VERSION_APP;
 

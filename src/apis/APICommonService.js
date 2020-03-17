@@ -32,7 +32,8 @@ export const API_KEY = {
     GROUP_ID_KEY: 'groupID',
     SEND_AT_KEY: 'send_at',
     USER_SEEN_KEY: 'userSeen',
-    CURRENT_VERSION_KEY: 'currVersion'
+    CURRENT_VERSION_KEY: 'currVersion',
+    PLAT_FORM_KEY: 'platform'
 }
 
 class APICommonService extends RestClient {
