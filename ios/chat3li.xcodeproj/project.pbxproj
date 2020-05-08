@@ -339,7 +339,8 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = G6F2Q9535M;
+						DevelopmentTeam = JYRN3R6QWV;
+						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -712,9 +713,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = chat3li/chat3li.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = G6F2Q9535M;
+				DEVELOPMENT_TEAM = JYRN3R6QWV;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -738,13 +741,16 @@
 				);
 				INFOPLIST_FILE = chat3li/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.chat3li.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.faceceo.lichat;
 				PRODUCT_NAME = chat3li;
+				PROVISIONING_PROFILE_SPECIFIER = "3lichat app-store";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -755,8 +761,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = chat3li/chat3li.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G6F2Q9535M;
+				DEVELOPMENT_TEAM = JYRN3R6QWV;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -780,13 +788,16 @@
 				);
 				INFOPLIST_FILE = chat3li/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.chat3li.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.faceceo.lichat;
 				PRODUCT_NAME = chat3li;
+				PROVISIONING_PROFILE_SPECIFIER = "3lichat app-store";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

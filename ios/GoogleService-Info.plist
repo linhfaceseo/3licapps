@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>80098054182-2fi634vcc3pphh769sqbbnu0t87gh51l.apps.googleusercontent.com</string>
+	<string>80098054182-clt9alptkaalb25lcrigsmqbqrg8r5dr.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.80098054182-2fi634vcc3pphh769sqbbnu0t87gh51l</string>
+	<string>com.googleusercontent.apps.80098054182-clt9alptkaalb25lcrigsmqbqrg8r5dr</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAi2ma1ScAYqWyAeWcob1tHYFW63fGOV34</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.chat3li.app</string>
+	<string>com.faceceo.lichat</string>
 	<key>PROJECT_ID</key>
 	<string>lichatproject</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:80098054182:ios:804439e5ecfd378f6996e7</string>
+	<string>1:80098054182:ios:1fa572531ac927b76996e7</string>
 	<key>DATABASE_URL</key>
 	<string>https://lichatproject.firebaseio.com</string>
 </dict>

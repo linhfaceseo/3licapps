@@ -504,6 +504,8 @@ PODS:
     - React
   - RNDeviceInfo (5.5.1):
     - React
+  - RNExitApp (1.1.0):
+    - React
   - RNFirebase (5.5.6):
     - Firebase/Core
     - React
@@ -554,6 +556,7 @@ DEPENDENCIES:
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNExitApp (from `../node_modules/react-native-exit-app`)
   - RNFirebase (from `../node_modules/react-native-firebase/ios`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLanguages (from `../node_modules/react-native-languages`)
@@ -643,6 +646,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNExitApp:
+    :path: "../node_modules/react-native-exit-app"
   RNFirebase:
     :path: "../node_modules/react-native-firebase/ios"
   RNGestureHandler:
@@ -705,11 +710,12 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: 8539fc80a0075fcc9c8e2dff84cd22dc5bf1dacf
   RNDeviceInfo: 6812ed7e578d4344bf4e77102f014b5adf0b5c28
+  RNExitApp: 7d81855142a4d11eb75f4f06fdebf5a950d7aef2
   RNFirebase: ac0de8b24c6f91ae9459575491ed6a77327619c6
   RNGestureHandler: 911d3b110a7a233a34c4f800e7188a84b75319c6
   RNLanguages: 962e562af0d34ab1958d89bcfdb64fafc37c513e
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 3e31734690a4ede2d1525e6b00a6662595bc2682
+PODFILE CHECKSUM: 042587745e902492a46b36189ed75b12256ca72c
 
 COCOAPODS: 1.8.4
